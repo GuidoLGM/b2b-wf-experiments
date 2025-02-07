@@ -1,0 +1,50 @@
+[
+    {
+        "name": "province",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "region",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "district",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "service_area_clli",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "service_area_name",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "migration",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "district_old",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "Region_Type",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    }
+]

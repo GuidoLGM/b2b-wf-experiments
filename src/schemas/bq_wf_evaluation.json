@@ -1,0 +1,86 @@
+[
+    {
+        "name": "Model",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "Forecast_Date",
+        "mode": "NULLABLE",
+        "type": "STRING",
+        "description": ""
+    },
+    {
+        "name": "WAPE",
+        "mode": "NULLABLE",
+        "type": "RECORD",
+        "description": "",
+        "fields": [
+            {
+                "name": "Overall",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_1",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_2",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_3",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            }
+        ]
+    },
+    {
+        "name": "RMSE",
+        "mode": "NULLABLE",
+        "type": "RECORD",
+        "description": "",
+        "fields": [
+            {
+                "name": "Overall",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_1",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_2",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            },
+            {
+                "name": "Tier_3",
+                "mode": "NULLABLE",
+                "type": "FLOAT",
+                "description": "",
+                "fields": []
+            }
+        ]
+    }
+]
