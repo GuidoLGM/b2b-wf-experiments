@@ -2,7 +2,7 @@ import pandas as pd
 
 class DataEvaluationPreprocessor:
 
-    REQUIRED_COLUMNS = ['Appointment_Month', 'SWT', 'Product_Grp', 'Work_Order_Action_Grp', 'District', 'Region_Type']
+    REQUIRED_COLUMNS = ['Appointment_Day', 'SWT', 'Product_Grp', 'Work_Order_Action_Grp', 'District', 'Region_Type']
     DATA_RANGE = pd.to_datetime([
             "2024-07-01", "2024-08-01", "2024-09-01",
             "2024-10-01", "2024-11-01", "2024-12-01"
@@ -19,7 +19,7 @@ class DataEvaluationPreprocessor:
         self.__remove_lower_priority_tiers()
 
 
-        self.data['Appointment_Month'] = pd.to_datetime(self.data['Appointment_Month'])
+        self.data['Appointment_Day'] = pd.to_datetime(self.data['Appointment_Day'])
 
     def __sort_columns(self):
         self.data = self.data[self.data.columns.sort_values()]
@@ -37,7 +37,7 @@ class DataEvaluationPreprocessor:
     def get_grouped_data(self, group_by: list[str] = None, filters: dict = None):
 
         if group_by is None:
-            group_by = self.data.columns.drop(['SWT', 'Appointment_Month'])
+            group_by = self.data.columns.drop(['SWT', 'Appointment_Day'])
 
         grouped_data = self.data.copy()
         
@@ -45,10 +45,10 @@ class DataEvaluationPreprocessor:
             grouped_data = self.get_filtered_data(filters)
             
         grouped_data['series_id'] = grouped_data[group_by].astype(str).agg(' '.join, axis=1)
-        grouped_data = grouped_data[['Appointment_Month', 'series_id','SWT']]
-        grouped_data.set_index('Appointment_Month', inplace=True)
-        grouped_data = grouped_data.sort_values(by=['Appointment_Month', 'series_id'])
-        grouped_data = grouped_data.groupby(['Appointment_Month', 'series_id'], as_index=True)['SWT'].sum()
+        grouped_data = grouped_data[['Appointment_Day', 'series_id','SWT']]
+        grouped_data.set_index('Appointment_Day', inplace=True)
+        grouped_data = grouped_data.sort_values(by=['Appointment_Day', 'series_id'])
+        grouped_data = grouped_data.groupby(['Appointment_Day', 'series_id'], as_index=True)['SWT'].sum()
         return grouped_data
 
     def __remove_lower_priority_tiers(self) -> pd.DataFrame:
@@ -79,24 +79,32 @@ class DataEvaluationPreprocessor:
     def __check_columns(self):
         """
             Check if the df has this columns:
-            - Appointment_Month
-            - SWT
-            - Product_Grp
-            - Work_Order_Action_Grp
-            - District
-            - Region_Type
+            - Appointment_Day [date]
+            - SWT [float]
+            - Product_Grp [str]
+            - Work_Order_Action_Grp [str]
+            - District [str]
+            - Region_Type [str]
         """
         
         missing_columns = set(self.REQUIRED_COLUMNS) - set(self.data.columns)
         if missing_columns:
-            raise ValueError(f"Missing required columns: {missing_columns}")   
+            raise ValueError(f"Missing required columns: {missing_columns}")  
+
+        # cast the data for the right types
+        self.data['Appointment_Day'] = pd.to_datetime(self.data['Appointment_Day'])
+        self.data['SWT'] = self.data['SWT'].astype(float)
+        self.data['Product_Grp'] = self.data['Product_Grp'].astype(str)
+        self.data['Work_Order_Action_Grp'] = self.data['Work_Order_Action_Grp'].astype(str)
+        self.data['District'] = self.data['District'].astype(str)
+        self.data['Region_Type'] = self.data['Region_Type'].astype(str)
             
     def __has_all_months(self):
         """
         Check if the df has all months from 2024-07-01 to 2024-12-01 for each series_id
         """
         data = self.data.copy()
-        data['series_id'] = data[data.columns.drop(['SWT', 'Appointment_Month'])].astype(str).agg(' '.join, axis=1)
+        data['series_id'] = data[data.columns.drop(['SWT', 'Appointment_Day'])].astype(str).agg(' '.join, axis=1)
         series_ids = data['series_id'].unique()
         for series_id in series_ids:
             series_data = data[data['series_id'] == series_id]
@@ -106,7 +114,7 @@ class DataEvaluationPreprocessor:
 
     def __ensure_all_months(self):
         """
-        For every unique combination of columns (other than Appointment_Month and SWT),
+        For every unique combination of columns (other than Appointment_Day and SWT),
         this function adds rows for all months between 2024-07-01 and 2024-12-01
         (inclusive) if they're missing. The SWT column is filled with 0 where data 
         does not exist in the original dataframe.
@@ -116,11 +124,11 @@ class DataEvaluationPreprocessor:
             return self.data
         
         df = self.data.copy()
-        df['Appointment_Month'] = pd.to_datetime(df['Appointment_Month'])
+        df['Appointment_Day'] = pd.to_datetime(df['Appointment_Day'])
 
-        id_cols = [col for col in df.columns if col not in ['Appointment_Month', 'SWT']]
+        id_cols = [col for col in df.columns if col not in ['Appointment_Day', 'SWT']]
         unique_ids = df[id_cols].drop_duplicates()
-        months_df = pd.DataFrame({'Appointment_Month': self.DATA_RANGE})
+        months_df = pd.DataFrame({'Appointment_Day': self.DATA_RANGE})
 
         unique_ids['merge_key'] = 1
         months_df['merge_key'] = 1
@@ -129,15 +137,15 @@ class DataEvaluationPreprocessor:
         merged = pd.merge(
             cross_joined,
             df,
-            on=id_cols + ['Appointment_Month'],
+            on=id_cols + ['Appointment_Day'],
             how='left'
         )
 
         merged['SWT'] = merged['SWT'].fillna(0)
 
-        merged = merged.sort_values(by=['Appointment_Month'] + id_cols).reset_index(drop=True)
+        merged = merged.sort_values(by=['Appointment_Day'] + id_cols).reset_index(drop=True)
 
-        merged = merged[['Appointment_Month'] + sorted(set(merged.columns) - {'Appointment_Month', 'SWT'}) + ['SWT']]
+        merged = merged[['Appointment_Day'] + sorted(set(merged.columns) - {'Appointment_Day', 'SWT'}) + ['SWT']]
 
         self.data = merged.copy()
         return merged
