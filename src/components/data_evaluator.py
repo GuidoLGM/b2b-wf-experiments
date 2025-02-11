@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-from src.components.data_evaluation_preprocessor import DataEvaluationPreprocessor
+from components.data_evaluation_preprocessor import DataEvaluationPreprocessor
 
 class Evaluation:
     

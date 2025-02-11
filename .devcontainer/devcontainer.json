@@ -13,7 +13,7 @@
 	"postAttachCommand": "gcloud config set project wb-ai-acltr-tbs-3-pr-a62583",
 	"containerEnv": {
 		"GOOGLE_APPLICATION_CREDENTIALS": "/workspaces/${localWorkspaceFolderBasename}/gcloud_cred.json",
-		"PYTHONPATH": "/workspaces/${localWorkspaceFolderBasename}/stacks/b2b_ai/b2b_wf_prediction/src",
+		"PYTHONPATH": "/workspaces/${localWorkspaceFolderBasename}/src",
 		"HTTP_PROXY": "http://198.161.14.25:8080",
 		"HTTPS_PROXY": "http://198.161.14.25:8080",
 		"http_proxy": "http://198.161.14.25:8080",
