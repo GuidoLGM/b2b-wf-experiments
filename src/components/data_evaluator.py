@@ -22,7 +22,7 @@ class Evaluation:
         Retrieve historical and predicted data (as DataFrames), optionally filtered and/or grouped.
         
         - If filters is provided (as a dict of {column: value}), the data are filtered.
-        - If group is True, data are grouped (default grouping is by ['series_id', 'Appointment_Month'] 
+        - If group is True, data are grouped (default grouping is by ['series_id', 'Appointment_Day'] 
           if no group_by is provided). In grouping, the SWT values are summed.
         """
         # Reset index to get Appointment_Month as a column.
@@ -44,7 +44,7 @@ class Evaluation:
         Parameters:
            metric:    str - Supported metrics: 'rmse', 'mape', or 'wape'
            group:     bool - Whether to group the raw data before merging.
-                            If True, the data is grouped (default group_by = ['series_id', 'Appointment_Month']).
+                            If True, the data is grouped (default group_by = ['series_id', 'Appointment_Day']).
            filters:   dict - Optional filtering criteria (e.g. {'Region_Type': 'Tier 1'}).
            group_by:  list[str] - The columns to group by if group is True.
            epsilon:   float - A small value to avoid division by zero in percentage calculations.
@@ -56,7 +56,7 @@ class Evaluation:
         
         merged = pd.merge(
             hist.reset_index(), pred.reset_index(), 
-            on=['Appointment_Month', 'series_id'], 
+            on=['Appointment_Day', 'series_id'], 
             suffixes=('_hist', '_pred'), 
             how='inner'
         )
