@@ -18,4 +18,5 @@ RUN pip install \
         ipykernel==6.29.0 \
         google-cloud-workflows==1.15.1 \
         google-cloud-aiplatform==1.74.0 \
-        kfp==2.11.0
+        kfp==2.11.0 \
+        tslearn==0.6.3
