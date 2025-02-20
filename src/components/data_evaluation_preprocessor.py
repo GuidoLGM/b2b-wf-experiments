@@ -44,8 +44,9 @@ class DataEvaluationPreprocessor:
         if filters is not None:
             grouped_data = self.get_filtered_data(filters)
             
-        grouped_data['series_id'] = grouped_data[group_by].astype(str).agg(' '.join, axis=1)
-        grouped_data = grouped_data[['Appointment_Day', 'series_id','SWT']]
+        temp_series = grouped_data[group_by].astype(str).apply(lambda row: ' '.join(row.values), axis=1)
+        grouped_data['series_id'] = temp_series
+        grouped_data = grouped_data[['Appointment_Day', 'series_id', 'SWT']]
         grouped_data.set_index('Appointment_Day', inplace=True)
         grouped_data = grouped_data.sort_values(by=['Appointment_Day', 'series_id'])
         grouped_data = grouped_data.groupby(['Appointment_Day', 'series_id'], as_index=True)['SWT'].sum()
