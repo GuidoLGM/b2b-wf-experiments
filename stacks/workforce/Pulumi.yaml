@@ -1,0 +1,457 @@
+# ----------------------------------------------------------------------------------------------------
+# Header
+# ----------------------------------------------------------------------------------------------------
+name: b2b_wf_prediction
+runtime: yaml
+description: B2B AI Solutions - WorkForce Prediction
+author: eliezer.bernart@telus.com
+
+# ----------------------------------------------------------------------------------------------------
+# Config
+# ----------------------------------------------------------------------------------------------------
+config:
+  builder:
+    type: string
+  project:
+    type: string
+  staging_expiry:
+    value: 2025-12-31
+    type: string
+
+# ----------------------------------------------------------------------------------------------------
+# Template Values
+# ----------------------------------------------------------------------------------------------------
+
+# TODO: add  list of resources and roles to the accounts list
+{% set
+  account_list,
+  table_functions,
+  table_views,
+  table_schemas,
+  table_drive_schemas,
+  stored_procedures
+  =
+  [
+    { "label": "aia_dl_list", "value": "group:dlemerging_opportunities@telus.com"                                   },
+    { "label": "dse_dv",      "value": "serviceAccount:etl-cust@cio-datahub-work-dv-c03a6c.iam.gserviceaccount.com" },
+    { "label": "dse_pr",      "value": "serviceAccount:etl-cust@cio-datahub-work-pr-0be526.iam.gserviceaccount.com" },
+    { "label": "dse_qa",      "value": "serviceAccount:etl-cust@cio-datahub-work-qa-1e9ecf.iam.gserviceaccount.com" },
+    { "label": "dse_cr_dv",   "value": "serviceAccount:520482548879@cloudbuild.gserviceaccount.com"                 },
+    { "label": "dse_cr_pr",   "value": "serviceAccount:112024180063@cloudbuild.gserviceaccount.com"                 },
+    { "label": "dse_cr_qa",   "value": "serviceAccount:522295942628@cloudbuild.gserviceaccount.com"                 },
+    { "label": "dse_jaydeep", "value": "user:jaydeep.bhelonde@telus.com"                                            },
+    { "label": "dse_abhi",    "value": "user:abhishek.parmanand@telus.com"                                          },
+    { "label": "aia_malta",   "value": "user:guilherme.malta@telus.com"                                             },
+  ],
+  [
+    {
+      "label": "tf_get_period_wf_data",
+      "path": "./src/sql/tf_get_period_wf_data.sql",
+      "arguments": [
+        { "name": "start_period", "type": "'{\"typeKind\" :  \"date\"}'" },
+        { "name": "end_period",   "type": "'{\"typeKind\" :  \"date\"}'"  }
+      ],
+      "dependencies": [
+        "${table_fn_tf_group_job_type_with_product_category}",
+        "${table_fn_tf_team_member_information}",
+        "${table_bq_wf_districts}"
+      ],
+    },
+    {
+      "label": "tf_group_job_type_with_product_category",
+      "path": "./src/sql/tf_group_job_type_with_product_category.sql",
+      "arguments": [
+        { "name": "job_type_cd",      "type": "'{\"typeKind\" :  \"string\"}'"  },
+        { "name": "product_category", "type": "'{\"typeKind\" :  \"string\"}'"  }
+      ],
+      "dependencies": [],
+    },
+    {
+      "label": "tf_group_product_type",
+      "path": "./src/sql/tf_group_product_type.sql",
+      "arguments": [
+        { "name": "Province", "type": "'{\"typeKind\" :  \"string\"}'"  },
+        { "name": "Product",  "type": "'{\"typeKind\" :  \"string\"}'"  }
+      ],
+      "dependencies": [],
+    },
+    {
+      "label": "tf_team_member_information",
+      "path": "./src/sql/tf_team_member_information.sql",
+      "arguments": [],
+      "dependencies": [],
+    },
+  ],
+  [
+    {
+      "label": "vw_wf_historical",
+      "path": "./src/sql/vw_wf_historical.sql",
+      "dependencies": [
+        "${table_bq_wf_historical}"
+      ],
+    },
+    {
+      "label": "vw_wf_display", 
+      "path": "./src/sql/vw_wf_display.sql",
+      "dependencies": [
+        "${table_vw_vw_wf_historical}",
+        "${table_bq_wf_predictions}"
+      ],
+    },
+    {
+      "label": "vw_wf_export",
+      "path": "./src/sql/vw_wf_export.sql",
+      "dependencies": [
+        "${table_vw_vw_wf_display}"
+      ],
+    }
+  ],
+  [
+    {
+      "label": "bq_wf_forecast",
+      "path": "./src/schema/bq_wf_forecast.json",
+      "description": "Table for storing data forecasted in multiple time periods"
+    },
+    {
+      "label": "bq_wf_historical",
+      "path": "./src/schema/bq_wf_historical.json",
+      "description": "Table for storing historical data used for training"
+    },
+    {
+      "label": "bq_wf_predictions",
+      "path": "./src/schema/bq_wf_predictions.json",
+      "description": "Table for storing the output of the model predictions, refreshed every new forecast"
+    },
+    {
+      "label": "bq_wf_marketing_corrections",
+      "path": "./src/schema/bq_wf_marketing_corrections.json",
+      "description": "Table for storing the output of the market corrections, refreshed every new forecast"
+    },
+    {
+      "label": "bq_wf_marketing",
+      "path": "./src/schema/bq_wf_marketing.json",
+      "description": "Table for persist the marketing RGU data"
+    },
+    {
+      "label": "bq_wf_display",
+      "path": "./src/schema/bq_wf_display.json",
+      "description": "Table for persist Looker studio's display data"
+    },
+  ],
+  [
+    {
+      "label": "bq_wf_special_projects",
+      "path": "./src/schema/bq_wf_special_projects.json",
+      "URI": "https://docs.google.com/spreadsheets/d/1_itLb6ed_2CbqGm_qzJfTl7LwKSyf3nlMI1JmCMFBqw/edit?usp=sharing",
+      "range": "",
+      "description": "Table for storing SWT data from special projects"
+    },
+    {
+      "label": "bq_wf_marketing_sheet",
+      "path": "./src/schema/bq_wf_marketing_sheet.json",
+      "URI": "https://docs.google.com/spreadsheets/d/12WxmzpWGhUrXhv_TN3yGqyc3SnCl5Zi-bE4yHQeV8R4/edit?usp=sharing",
+      "range": "",
+      "description": "Table for storing data from forecasted and adjusted RGU"
+    },
+    {
+      "label": "bq_wf_efficiencies",
+      "path": "./src/schema/bq_wf_efficiencies.json",
+      "URI": "https://docs.google.com/spreadsheets/d/1kAdJOP6lPVqKJ50HJYHPBvs_IiPUrzMsUkmIwrJIoAk/edit?usp=sharing",
+      "range": "",
+      "description": "Table for storing data from efficiencies"
+    },
+    {
+      "label": "bq_wf_districts",
+      "path": "./src/schema/bq_wf_districts.json",
+      "URI": "https://docs.google.com/spreadsheets/d/15xwRmeI6XVgWi4sVpouWlq_iMyzrDetRcifFLthgwDw/edit?usp=sharing",
+      "range": "",
+      "description": "Table for storing data from districts"
+    },
+  ],
+  [
+    {
+      "label": "sp_persist_wf_historical",
+      "path": "./src/sql/sp_persist_wf_historical.sql",
+      "arguments": [
+        { "name": "_start_period_dt", "type": "'{\"typeKind\" :  \"date\"}'" },
+        { "name": "_end_period_dt", "type": "'{\"typeKind\" :  \"date\"}'" }
+      ],
+    },
+    {
+      "label": "sp_persist_wf_predictions",
+      "path": "./src/sql/sp_persist_wf_predictions.sql",
+      "arguments": [
+        { "name": "_start_period_dt", "type": "'{\"typeKind\" :  \"date\"}'" },
+        { "name": "_end_period_dt", "type": "'{\"typeKind\" :  \"date\"}'" }
+      ],
+    },
+    {
+      "label": "sp_persist_wf_forecasts",
+      "path": "./src/sql/sp_persist_wf_forecasts.sql",
+      "arguments": [
+        { "name": "_table_name", "type": "'{\"typeKind\" :  \"string\"}'" }
+      ],
+    },
+    {
+      "label": "sp_persist_wf_product_mapping",
+      "path": "./src/sql/sp_persist_wf_product_mapping.sql",
+      "arguments": []
+    },
+    {
+      "label": "sp_persist_wf_marketing",
+      "path": "./src/sql/sp_persist_wf_marketing.sql",
+      "arguments": []
+    },
+    {
+      "label": "sp_persist_display",
+      "path": "./src/sql/sp_persist_display.sql",
+      "arguments": []
+    }
+  ]
+%}
+
+# ----------------------------------------------------------------------------------------------------
+# Variables
+# ----------------------------------------------------------------------------------------------------
+variables:
+  # -- General Variables
+  project:     ${project}
+  project_sha: ${project_sha}
+  location:    northamerica-northeast1
+  stack_name:  b2b_ai
+  bq_writer:   roles/bigquery.dataEditor
+
+  # -- Database Variables
+  dataset_name: b2b_wf_prediction
+
+  # -- Automation Variables
+  exe_bucket: notebook-scripts-${project_sha}
+  out_bucket: bkt_b2b_wf_prediction
+
+  {% for table in table_schemas %}
+  schema_{{ table.label }}:
+    fn::readFile: "{{ table.path }}"
+  {% endfor %}
+
+  {% for table in table_drive_schemas %}
+  schema_{{ table.label }}:
+    fn::readFile: "{{ table.path }}"
+  {% endfor %}
+
+  {% for view in table_views %}
+  query_{{ view.label }}:
+    fn::readFile: "{{ view.path }}"
+
+  query_{{ view.label }}_upd:
+    fn::str:replace:
+      string: ${query_{{ view.label }}}
+      old: "{project}"
+      new: ${project}
+  {% endfor %}
+
+  {% for table_fn in table_functions %}
+  query_{{ table_fn.label }}:
+    fn::readFile: "{{ table_fn.path }}"
+  
+  query_{{ table_fn.label }}_upd:
+    fn::str:replace:
+      string: ${query_{{ table_fn.label }}}
+      old: "{project}"
+      new: ${project}
+  {% endfor %}
+
+  {% for stored_proc in stored_procedures %}
+  query_{{ stored_proc.label }}:
+    fn::readFile: "{{ stored_proc.path }}"
+  
+  query_{{ stored_proc.label }}_upd:
+    fn::str:replace:
+      string: ${query_{{ stored_proc.label }}}
+      old: "{project}"
+      new: ${project}
+  {% endfor %}
+
+
+resources:
+  # ----------------------------------------------------------------------------------------------------
+  # Dataset
+  # ----------------------------------------------------------------------------------------------------
+
+  # Create Output Dataset
+  main_dataset:
+    type: gcp:bigquery:Dataset
+    properties:
+      datasetId: ${dataset_name}
+      description: |
+        Dataset for B2B AI Solutions - Workforce Prediction
+      project: ${project}
+      location: ${location}
+      deleteContentsOnDestroy: true
+  
+  # Create IAM Permission 
+  {% for account in account_list %}
+  main_dataset_iam_{{ account.label }}:
+    type: gcp:bigquery:DatasetIamMember
+    properties:
+      project: ${project}
+      datasetId: ${dataset_name}
+      role: roles/bigquery.dataEditor
+      member: "{{ account.value }}"
+    options:
+      dependsOn:
+        - ${main_dataset}
+  {% endfor %}
+
+  # ----------------------------------------------------------------------------------------------------
+  # Tables
+  # ----------------------------------------------------------------------------------------------------
+
+  {% for table in table_drive_schemas %}
+  table_{{ table.label }}:
+    type: gcp:bigquery:Table
+    properties:
+      datasetId: ${dataset_name}
+      tableId: "{{ table.label }}"
+      description: |
+        {{ table.description }}
+      deletionProtection: false
+      schema: |
+        ${schema_{{ table.label }}}
+      externalDataConfiguration:
+        autodetect: true
+        sourceFormat: GOOGLE_SHEETS
+        sourceUris:
+          - {{ table.URI }}
+        googleSheetsOptions:
+          range: {{ table.range }}
+          skipLeadingRows: 1
+    options:
+      deleteBeforeReplace: false
+      replaceOnChanges:
+        - tableId
+      dependsOn:
+        - ${main_dataset}
+  {% endfor %}
+
+
+  {% for table in table_schemas %}
+  table_{{ table.label }}:
+    type: gcp:bigquery:Table
+    properties:
+      datasetId: ${dataset_name}
+      tableId: "{{ table.label }}"
+      description: |
+        {{ table.description }}
+      deletionProtection: false
+      schema: |
+        ${schema_{{ table.label }}}
+    options:
+      deleteBeforeReplace: false
+      replaceOnChanges:
+        - tableId
+      dependsOn:
+        - ${main_dataset}
+
+  {% for account in account_list %}
+  table_{{ table.label }}_iam_{{ account.label }}:
+    type: gcp:bigquery:IamMember
+    properties:
+      project: ${project}
+      datasetId: ${dataset_name}
+      tableId: "{{ table.label }}"
+      role: ${bq_writer}
+      member: "{{ account.value }}"
+    options:
+      dependsOn:
+        - ${table_{{ table.label }}}
+  {% endfor %}
+
+  {% endfor %}
+
+  # ----------------------------------------------------------------------------------------------------
+  # Table Functions
+  # ----------------------------------------------------------------------------------------------------
+
+  {% for table_fn in table_functions %}
+  table_fn_{{ table_fn.label }}:
+    type: gcp:bigquery:Routine
+    properties:
+      project: ${project}
+      routineId: "{{ table_fn.label }}"
+      routineType: TABLE_VALUED_FUNCTION
+      datasetId: ${dataset_name}
+      language: SQL
+      {% if table_fn.arguments != [] %}
+      arguments:
+        {% for arg in table_fn.arguments %}
+        - name: {{ arg.name }}
+          dataType: {{ arg.type }}
+        {% endfor %}
+      {% endif %}
+      definitionBody: |
+        ${query_{{ table_fn.label }}_upd.result}
+    options:
+      dependsOn:
+        - ${main_dataset}
+      {% if table_fn.dependencies != [] %}
+        {% for dep in table_fn.dependencies %}
+        - {{ dep }}
+        {% endfor %}
+      {% endif %}
+  {% endfor %}
+
+  # ----------------------------------------------------------------------------------------------------
+  # Stored Procedures
+  # ----------------------------------------------------------------------------------------------------
+
+  {% for stored_proc in stored_procedures %}
+  sp_{{ stored_proc.label }}:
+    type: gcp:bigquery:Routine
+    properties:
+      project: ${project}
+      routineId: "{{ stored_proc.label }}"
+      routineType: PROCEDURE
+      datasetId: ${dataset_name}
+      language: SQL
+      {% if stored_proc.arguments != [] %}
+      arguments:
+        {% for arg in stored_proc.arguments %}
+        - name: {{ arg.name }}
+          dataType: {{ arg.type }}
+        {% endfor %}
+      {% endif %}
+      definitionBody: |
+        ${query_{{ stored_proc.label }}_upd.result}
+    options:
+      dependsOn:
+        - ${main_dataset}
+  {% endfor %}
+
+  # ----------------------------------------------------------------------------------------------------
+  # Table Views
+  # ----------------------------------------------------------------------------------------------------
+
+  {% for table_vw in table_views %}
+  table_vw_{{ table_vw.label }}:
+    type: gcp:bigquery:Table
+    properties:
+      datasetId: ${dataset_name}
+      tableId: "{{ table_vw.label }}"
+      deletionProtection: false
+      view:
+        useLegacySql: false
+        query: >
+          ${query_{{ table_vw.label }}_upd.result}
+    options:
+      deleteBeforeReplace: true
+      replaceOnChanges:
+        - query
+        - tableId
+      dependsOn:
+        - ${main_dataset}
+      {% if table_vw.dependencies != [] %}
+        {% for dep in table_vw.dependencies %}
+        - {{ dep }}
+        {% endfor %}
+      {% endif %}
+  {% endfor %}

@@ -1,0 +1,32 @@
+[
+    {
+      "name": "Appointment_Month",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": ""
+    },
+    {
+      "name": "Product",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Actual_RGU",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": ""
+    },
+    {
+      "name": "Forecasted_RGU",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": ""
+    },
+    {
+      "name": "Adjusted_RGU",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": ""
+    }
+]

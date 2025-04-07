@@ -1,0 +1,80 @@
+[
+    {
+      "name": "Forecast_Date",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": ""
+    },
+    {
+      "name": "Appointment_Month",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": ""
+    },
+    {
+      "name": "District",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Region_Type",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Product",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Product_Grp",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Technology",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Work_Order_Action",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Work_Order_Action_Grp",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Work_Force",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "AWT_Historical",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "SWT_Historical",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "SWT_Predicted",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    }
+]

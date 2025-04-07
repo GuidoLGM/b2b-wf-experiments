@@ -1,0 +1,170 @@
+[
+    {
+      "name": "Project_Name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Project_Prime",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Product",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Job_Type",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "RGU_Tracking",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Region",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Special_Project",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Start_Date",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "End_Date",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "Notes",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "July_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "August_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "September_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "October_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "November_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "December_2024",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "January_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "February_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "March_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "April_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "May_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "June_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "July_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "August_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "September_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "October_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "November_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    },
+    {
+      "name": "December_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": ""
+    }
+  ]

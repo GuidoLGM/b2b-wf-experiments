@@ -1,0 +1,206 @@
+[
+    {
+      "name": "Program_Name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The name of the program."
+    },
+    {
+      "name": "Initiative_Name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The name of the initiative."
+    },
+    {
+      "name": "Brief_Description",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "A brief description of the program or initiative."
+    },
+    {
+      "name": "Owner",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The owner responsible for the program or initiative."
+    },
+    {
+      "name": "Start_Date",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": "The start date of the program or initiative."
+    },
+    {
+      "name": "Notes",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "Additional notes or information about the program or initiative."
+    },
+    {
+      "name": "Products_Impacted",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The products impacted by the program or initiative."
+    },
+    {
+      "name": "Job_Types_Impacted",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The job types impacted by the program or initiative."
+    },
+    {
+      "name": "Region_Impacted",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The region impacted by the program or initiative."
+    },
+    {
+      "name": "Type_of_Reduction",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The type of reduction involved in the program or initiative."
+    },
+    {
+      "name": "Jan_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for January 2025."
+    },
+    {
+      "name": "Feb_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for February 2025."
+    },
+    {
+      "name": "Mar_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for March 2025."
+    },
+    {
+      "name": "Apr_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for April 2025."
+    },
+    {
+      "name": "May_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for May 2025."
+    },
+    {
+      "name": "Jun_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for June 2025."
+    },
+    {
+      "name": "Jul_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for July 2025."
+    },
+    {
+      "name": "Aug_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for August 2025."
+    },
+    {
+      "name": "Sep_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for September 2025."
+    },
+    {
+      "name": "Oct_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for October 2025."
+    },
+    {
+      "name": "Nov_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for November 2025."
+    },
+    {
+      "name": "Dec_2025",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for December 2025."
+    },
+    {
+      "name": "Jan_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for January 2026."
+    },
+    {
+      "name": "Feb_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for February 2026."
+    },
+    {
+      "name": "Mar_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for March 2026."
+    },
+    {
+      "name": "Apr_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for April 2026."
+    },
+    {
+      "name": "May_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for May 2026."
+    },
+    {
+      "name": "Jun_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for June 2026."
+    },
+    {
+      "name": "Jul_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for July 2026."
+    },
+    {
+      "name": "Aug_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for August 2026."
+    },
+    {
+      "name": "Sep_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for September 2026."
+    },
+    {
+      "name": "Oct_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for October 2026."
+    },
+    {
+      "name": "Nov_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for November 2026."
+    },
+    {
+      "name": "Dec_2026",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "Value for December 2026."
+    }
+  ]

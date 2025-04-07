@@ -1,0 +1,50 @@
+[
+    {
+      "name": "province",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The province of each service area"
+    },
+    {
+      "name": "region",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The reagion of each service area"
+    },
+    {
+      "name": "district",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The district of each service area"
+    },
+    {
+      "name": "service_area_clli",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The service area unique code"
+    },
+    {
+      "name": "service_area_name",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The service area name"
+    },
+    {
+      "name": "migration",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The panorama migration for each service area"
+    },
+    {
+      "name": "district_old",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "pre panorama district"
+    },
+    {
+      "name": "region_type",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "service area tier"
+    }
+  ]

@@ -1,0 +1,44 @@
+[
+    {
+      "name": "Month",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "RGU prediciton's month"
+    },
+    {
+      "name": "Year",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "RGU prediciton's year"
+    },
+    {
+      "name": "Product",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "RGU product"
+    },
+    {
+      "name": "RGU_Type",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "Gross Adds or Subs"
+    },
+    {
+      "name": "Original_Actual",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "Original RGU (from marketing) + Forecast RGU"
+    },
+    {
+      "name": "Adjusted_Actual",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "Adjuted RGU + Forecast RGU"
+    },
+    {
+      "name": "Notes",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "Addicional descriptions"
+    }
+  ]

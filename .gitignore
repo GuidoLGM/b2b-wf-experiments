@@ -1,6 +1,6 @@
-gcloud_cred.json
 .DS_Store
 __pycache__/
 
-src/notebook/historical_data.csv
-src/notebook/forecast_df.csv
+.venv/
+
+secrets/

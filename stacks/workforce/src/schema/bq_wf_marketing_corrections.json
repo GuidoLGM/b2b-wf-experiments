@@ -1,0 +1,56 @@
+[
+    {
+      "name": "Forecast_Date",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The date when the forecast prediction was generated"
+    },
+    {
+      "name": "Appointment_Month",
+      "mode": "NULLABLE",
+      "type": "DATE",
+      "description": "Month of the appointment scheduling date"
+    },
+    {
+      "name": "Product",
+      "mode": "NULLABLE",
+      "type": "STRING",
+      "description": "The product for which the appointment is scheduled"
+    },
+    {
+      "name": "SWT_Forecasted_RGU",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "The correction by the forecasted RGU values"
+    },
+    {
+        "name": "SWT_Adjusted_RGU",
+        "mode": "NULLABLE",
+        "type": "FLOAT",
+        "description": "The correction by the ajusted RGU values"
+      },
+    {
+      "name": "Alpha_Correction_Forecasted",
+      "mode": "NULLABLE",
+      "type": "FLOAT",
+      "description": "The alpha parameter appliend on forecasted correction"
+    },
+    {
+      "name": "Lag_Correction_Forecasted",
+      "mode": "NULLABLE",
+      "type": "INTEGER",
+      "description": "The lag parameter appliend on forecasted correction"
+    },
+    {
+        "name": "Alpha_Correction_Adjusted",
+        "mode": "NULLABLE",
+        "type": "FLOAT",
+        "description": "The alpha parameter appliend on Adjusted correction"
+      },
+      {
+        "name": "Lag_Correction_Adjusted",
+        "mode": "NULLABLE",
+        "type": "INTEGER",
+        "description": "The lag parameter appliend on Adjusted correction"
+      }
+  ]

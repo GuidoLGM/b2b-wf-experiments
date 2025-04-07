@@ -1,0 +1,11 @@
+PROJECT_ID: "bi-stg-aaaie-pr-750ff7"
+GCS_BUCKET_NAME: "bkt_b2b_wf_prediction"
+PROJECT_REGION: "northamerica-northeast1"
+
+VERTEX_DATASET_NAME: "b2b_wf_prediction_train"
+VERTEX_MODEL_NAME: "b2b_wf_prediction_model"
+VERTEX_PREDICTION_NAME: "b2b_wf_prediction_batch"
+
+BQ_DATASET_NAME: "b2b_wf_prediction"
+BQ_TRAIN_TABLE: "vw_wf_historical"
+BQ_PREDICT_TABLE: "bq_wf_predictions"

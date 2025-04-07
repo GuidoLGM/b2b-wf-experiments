@@ -1,0 +1,104 @@
+[
+  {
+    "name": "Appointment_Timestamp",
+    "mode": "NULLABLE",
+    "type": "DATE",
+    "description": "Timestamp of the appointment scheduling"
+  },
+  {
+    "name": "Work_Force",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The workforce that is assigned to the appointment"
+  },
+  {
+    "name": "Job_Assignment_Status",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Status of the job assignment"
+  },
+  {
+    "name": "Job_Type_Cd",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Code of job type for which the appointment is scheduled"
+  },
+  {
+    "name": "Product_Category",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Category of the product for which the appointment is scheduled"
+  },
+  {
+    "name": "Technology",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Type of technology for which the appointment is scheduled"
+  },
+  {
+    "name": "Work_Order_Action",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The type of the action scheduled for the appointment"
+  },
+  {
+    "name": "Work_Order_Action_Grp",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Categorization for work order action is scheduled for the appointment"
+  },
+  {
+    "name": "District",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "One of the 42 districts where the appointment is scheduled"
+  },
+  {
+    "name": "Province",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The province where the appointment is scheduled"
+  },
+  {
+    "name": "Product_Key",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Product key for which the appointment is scheduled"
+  },
+  {
+    "name": "Product",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Product for which the appointment is scheduled"
+  },
+  {
+    "name": "Product_Grp",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "Categorization for product for which the appointment is scheduled"
+  },
+  {
+    "name": "SWT",
+    "mode": "NULLABLE",
+    "type": "NUMERIC",
+    "description": "Total number of SWT hours estimated for appointments grouped in this record"
+  },
+  {
+    "name": "AWT",
+    "mode": "NULLABLE",
+    "type": "NUMERIC",
+    "description": "Total number of actual hours informed for appointments grouped in this record"
+  },
+  {
+    "name": "JobCount",
+    "mode": "NULLABLE",
+    "type": "INTEGER",
+    "description": "Total number of jobs grouped in the table record"
+  },
+  {
+    "name": "WorkOrderCount",
+    "mode": "NULLABLE",
+    "type": "INTEGER",
+    "description": "Total number of work orders grouped in the table record"
+  }
+]

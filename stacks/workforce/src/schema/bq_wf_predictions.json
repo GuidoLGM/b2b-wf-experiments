@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Series_Identifier",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The identifier of the time series given by the granularity concatenation"
+  },
+  {
+    "name": "Appointment_Month",
+    "mode": "NULLABLE",
+    "type": "DATE",
+    "description": "Month of the appointment scheduling date"
+  },
+  {
+    "name": "District",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "One of the 42 districts where the appointment is scheduled"
+  },
+  {
+    "name": "Product",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The product for which the appointment is scheduled"
+  },
+  {
+    "name": "Technology",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The type of technology for which the appointment is scheduled"
+  },
+  {
+    "name": "Work_Order_Action",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The type of the action that is scheduled for the appointment"
+  },
+  {
+    "name": "Work_Force",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The workforce that is assigned to the appointment"
+  },
+  {
+    "name": "SWT",
+    "mode": "NULLABLE",
+    "type": "NUMERIC",
+    "description": "The number of SWT hours estimated for the appointment"
+  },
+  {
+    "name": "SWT_Type",
+    "mode": "NULLABLE",
+    "type": "STRING",
+    "description": "The type of SWT, if actual or predicted"
+  }
+]
