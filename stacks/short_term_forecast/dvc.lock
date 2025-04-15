@@ -1,0 +1,41 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m src.ShortTermForecast.pipeline.stage_00_data_ingestion
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 0e75b1735f446c2e514219f866658461
+      size: 830
+    - path: src/ShortTermForecast/pipeline/stage_00_data_ingestion.py
+      hash: md5
+      md5: 8d4546dab6ad05713eecaed105586e4a
+      size: 830
+    outs:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 35fd2c8dc09695313cd885acc355fc40.dir
+      size: 48422459
+      nfiles: 1
+  time_series_cv:
+    cmd: python -m src.ShortTermForecast.pipeline.stage_01_time_series_cv
+    deps:
+    - path: artifacts/data_ingestion/
+      hash: md5
+      md5: 35fd2c8dc09695313cd885acc355fc40.dir
+      size: 48422459
+      nfiles: 1
+    - path: config/config.yaml
+      hash: md5
+      md5: 0e75b1735f446c2e514219f866658461
+      size: 830
+    - path: src/ShortTermForecast/pipeline/stage_01_time_series_cv.py
+      hash: md5
+      md5: fd06ec6975ed369c4ed662b6ae574f8f
+      size: 923
+    outs:
+    - path: artifacts/cross_validation/
+      hash: md5
+      md5: 26635be4072ed0f62a405171c9ea488d.dir
+      size: 306
+      nfiles: 2

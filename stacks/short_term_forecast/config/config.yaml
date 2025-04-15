@@ -1,0 +1,33 @@
+artifacts_root: artifacts
+
+
+general_setup:
+  project_id: wb-ai-acltr-tbs-3-pr-a62583
+  project_location: northamerica-northeast1
+  gcs_bucket: bkt_b2b_wf_prediction
+  time_column: Appointment_Day
+  target_column: SWT
+  series_identifier: Series_Identifier
+  forecast_horizon: 91
+  attribute_columns: [
+    "District",
+    "Region_Type",
+    "Product",
+    "Product_Grp",
+    "Technology",
+    "Work_Order_Action",
+    "Work_Order_Action_Grp",
+    "Work_Force"
+  ]
+  pipeline_package_path: b2b_wf_prediction_kfp.yaml
+
+data_ingestion:
+    root_dir: artifacts/data_ingestion
+    local_file_name: fwds_daily_data.csv
+    bq_dataset: b2b_wf_prediction
+    bq_source_table: vw_wf_daily_historical
+
+cross_validation:
+  root_dir: artifacts/cross_validation
+  train_file_name: cv_processed_train.csv
+  test_file_name: cv_processed_test.csv

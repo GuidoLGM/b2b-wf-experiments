@@ -1,0 +1,504 @@
+# PIPELINE DEFINITION
+# Name: b2b-wf-short-term-prediction-experiments
+# Description: A Kubeflow pipeline for training forecast models using AutoML Forecast on Vertex AI Pipelines from a BigQuery view.
+# Inputs:
+#    attribute_columns: list
+#    bq_dataset: str
+#    bq_source_table: str
+#    forecast_horizon: int
+#    project_id: str
+#    project_location: str
+#    series_identifier: str
+#    target_column: str
+#    time_column: str
+components:
+  comp-data-ingestion-op:
+    executorLabel: exec-data-ingestion-op
+    inputDefinitions:
+      parameters:
+        attribute_columns:
+          parameterType: LIST
+        base_output_directory:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        bq_dataset:
+          parameterType: STRING
+        bq_source_table:
+          parameterType: STRING
+        display_name:
+          defaultValue: data-ingestion-component
+          isOptional: true
+          parameterType: STRING
+        enable_web_access:
+          defaultValue: false
+          isOptional: true
+          parameterType: BOOLEAN
+        encryption_spec_key_name:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        labels:
+          defaultValue: {}
+          isOptional: true
+          parameterType: STRUCT
+        location:
+          defaultValue: '{{$.pipeline_google_cloud_location}}'
+          isOptional: true
+          parameterType: STRING
+        max_wait_duration:
+          defaultValue: 86400s
+          isOptional: true
+          parameterType: STRING
+        network:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        persistent_resource_id:
+          defaultValue: '{{$.pipeline_persistent_resource_id}}'
+          isOptional: true
+          parameterType: STRING
+        project:
+          defaultValue: '{{$.pipeline_google_cloud_project_id}}'
+          isOptional: true
+          parameterType: STRING
+        project_id:
+          parameterType: STRING
+        project_location:
+          parameterType: STRING
+        reserved_ip_ranges:
+          defaultValue: []
+          isOptional: true
+          parameterType: LIST
+        restart_job_on_worker_restart:
+          defaultValue: false
+          isOptional: true
+          parameterType: BOOLEAN
+        series_identifier:
+          parameterType: STRING
+        service_account:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        strategy:
+          defaultValue: STANDARD
+          isOptional: true
+          parameterType: STRING
+        target_column:
+          parameterType: STRING
+        tensorboard:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        time_column:
+          parameterType: STRING
+        timeout:
+          defaultValue: 604800s
+          isOptional: true
+          parameterType: STRING
+        worker_pool_specs:
+          defaultValue:
+          - container_spec:
+              args:
+              - --executor_input
+              - '{{$.json_escape[1]}}'
+              - --function_to_execute
+              - data_ingestion_op
+              command:
+              - sh
+              - -c
+              - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip\
+                \ || python3 -m ensurepip --user || apt-get install python3-pip\n\
+                fi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet\
+                \ --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5;\
+                \ python_version<\"3.9\"' && \"$0\" \"$@\"\n"
+              - sh
+              - -ec
+              - 'program_path=$(mktemp -d)
+
+
+                printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+                _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+                '
+              - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing\
+                \ import *\n\ndef data_ingestion_op(\n    project_id: str,\n    project_location:\
+                \ str,\n    bq_dataset: str,\n    bq_source_table: str,\n    time_column:\
+                \ str,\n    target_column: str,\n    series_identifier: str,\n   \
+                \ attribute_columns: List[str],\n    output_dataset: Output[Dataset]\n\
+                ):\n    from dataclasses import dataclass\n    from google.cloud import\
+                \ bigquery\n    from pathlib import Path\n    from typing import List\n\
+                \    import os\n    import sys\n    import logging\n\n\n    logging_str\
+                \ = \"[%(asctime)s: %(levelname)s: %(module)s] %(message)s\"\n\n \
+                \   log_dir = 'logs'\n    log_pathfile = os.path.join(log_dir, 'running_logs.log')\n\
+                \    os.makedirs(log_dir, exist_ok=True)\n\n    logging.basicConfig(\n\
+                \        level=logging.INFO,\n        format=logging_str,\n\n    \
+                \    handlers=[\n            logging.FileHandler(log_pathfile),\n\
+                \            logging.StreamHandler(sys.stdout)\n        ]\n    )\n\
+                \n    logger = logging.getLogger(\"Match-Analysis\")\n\n    @dataclass(frozen=True)\n\
+                \    class DataIngestionConfig:\n        root_dir: Path\n        local_file_name:\
+                \ str\n        project_id: str\n        project_location: str\n  \
+                \      bq_dataset: str\n        bq_source_table: str\n        time_column:\
+                \ str\n        target_column: str\n        series_identifier: str\n\
+                \        attribute_columns: List[str]\n\n    class ConfigurationManager:\n\
+                \        def __init__(self):\n            pass\n        def get_data_ingestion_kfp_config(\n\
+                \                self,\n                project_id: str,\n       \
+                \         project_location: str,\n                bq_dataset: str,\n\
+                \                bq_source_table: str,\n                time_column:\
+                \ str,\n                target_column: str,\n                series_identifier:\
+                \ str,\n                attribute_columns: List[str]\n        ) ->\
+                \ DataIngestionConfig:\n            \"\"\"\n            Returns a\
+                \ DataIngestionConfig configured for Kubeflow Pipeline runs.\n   \
+                \         \"\"\"\n\n            return DataIngestionConfig(\n    \
+                \            root_dir=None,\n                local_file_name=None,\n\
+                \                project_id=project_id,\n                project_location=project_location,\n\
+                \                bq_dataset=bq_dataset,\n                bq_source_table=bq_source_table,\n\
+                \                time_column=time_column,\n                target_column=target_column,\n\
+                \                series_identifier=series_identifier,\n          \
+                \      attribute_columns=attribute_columns\n            )        \n\
+                \n    class DataIngestion:\n        def __init__(self, config: DataIngestionConfig):\n\
+                \            self.config = config\n            self.client = None\n\
+                \            self.data = None\n            logger.info(\"DataIngestion\
+                \ instance initialized with provided configuration.\")\n\n       \
+                \ def _create_series_identifier(self) -> str:\n            coalesce_parts\
+                \ = [f\"COALESCE({column}, 'None')\" for column in self.config.attribute_columns]\n\
+                \            separator = \"' '\"\n            series_identifier =\
+                \ f\"CONCAT({f', {separator}, '.join(coalesce_parts)}) AS {self.config.series_identifier}\"\
+                \n            logger.debug(f\"Created series identifier: {series_identifier}\"\
+                )\n            return series_identifier\n\n        def load(self):\n\
+                \            logger.info(\"Initializing BigQuery client and loading\
+                \ data.\")\n            self.client = bigquery.Client(\n         \
+                \       project=self.config.project_id,\n                location=self.config.project_location\n\
+                \            )\n\n            try:\n                self.data = self.client.query(self.data_ingestion_query).to_dataframe()\n\
+                \                logger.info(f\"Data loaded successfully. Shape: {self.data.shape}\"\
+                )\n            except Exception as e:\n                logger.error(f\"\
+                Error loading data from BigQuery: {str(e)}\")\n                raise\n\
+                \n        def save(self, save_path: str = None):\n            if save_path\
+                \ is None:\n                save_path = Path(self.config.root_dir,\
+                \ self.config.local_file_name)\n\n            logger.info(f\"Saving\
+                \ data to {save_path}\")\n            try:\n                self.data.to_csv(save_path,\
+                \ index=False)\n                logger.info(\"Data saved successfully.\"\
+                )\n            except Exception as e:\n                logger.error(f\"\
+                Error saving data to CSV: {str(e)}\")\n                raise\n\n \
+                \       @property\n        def data_ingestion_query(self) -> str:\n\
+                \            query = f\"\"\"\n            WITH historical_table AS\
+                \ (\n                SELECT \n                    {self.config.time_column},\n\
+                \                    {self.attribute_string},\n                  \
+                \  SUM({self.config.target_column}) AS {self.config.target_column}\n\
+                \                FROM \n                    `{self.config.project_id}.{self.config.bq_dataset}.{self.config.bq_source_table}`\n\
+                \                WHERE \n                    {self.config.time_column}\
+                \ <= DATE('2025-03-31')\n                GROUP BY \n             \
+                \       {self.config.time_column},\n                    {self.attribute_string}\n\
+                \            )\n            SELECT \n                {self._create_series_identifier()},\n\
+                \                {self.config.time_column},\n                {self.attribute_string},\n\
+                \                {self.config.target_column}\n            FROM historical_table\n\
+                \            \"\"\"\n            logger.debug(\"Generated data ingestion\
+                \ query.\")\n            return query\n\n        @property\n     \
+                \   def attribute_string(self) -> str:\n            return ','.join(self.config.attribute_columns)\n\
+                \n    data_ingestion_config = ConfigurationManager().get_data_ingestion_kfp_config(\n\
+                \        project_id=project_id,\n        project_location=project_location,\n\
+                \        bq_dataset=bq_dataset,\n        bq_source_table=bq_source_table,\n\
+                \        time_column=time_column,\n        target_column=target_column,\n\
+                \        series_identifier=series_identifier,\n        attribute_columns=attribute_columns\n\
+                \    )\n\n\n    data_ingestion = DataIngestion(data_ingestion_config)\n\
+                \n    data_ingestion.load()\n    data_ingestion.save(output_dataset.path)\n\
+                \n"
+              env: []
+              image_uri: northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.1-rc
+            disk_spec:
+              boot_disk_size_gb: 100.0
+              boot_disk_type: pd-ssd
+            machine_spec:
+              machine_type: e2-standard-4
+            replica_count: 1.0
+          isOptional: true
+          parameterType: LIST
+    outputDefinitions:
+      artifacts:
+        output_dataset:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+      parameters:
+        gcp_resources:
+          parameterType: STRING
+  comp-generate-time-series-cv-op:
+    executorLabel: exec-generate-time-series-cv-op
+    inputDefinitions:
+      artifacts:
+        input_dataset:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+      parameters:
+        base_output_directory:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        display_name:
+          defaultValue: generate-timeseries-cv-job
+          isOptional: true
+          parameterType: STRING
+        enable_web_access:
+          defaultValue: false
+          isOptional: true
+          parameterType: BOOLEAN
+        encryption_spec_key_name:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        forecast_horizon:
+          parameterType: NUMBER_INTEGER
+        labels:
+          defaultValue: {}
+          isOptional: true
+          parameterType: STRUCT
+        location:
+          defaultValue: '{{$.pipeline_google_cloud_location}}'
+          isOptional: true
+          parameterType: STRING
+        max_wait_duration:
+          defaultValue: 86400s
+          isOptional: true
+          parameterType: STRING
+        network:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        persistent_resource_id:
+          defaultValue: '{{$.pipeline_persistent_resource_id}}'
+          isOptional: true
+          parameterType: STRING
+        project:
+          defaultValue: '{{$.pipeline_google_cloud_project_id}}'
+          isOptional: true
+          parameterType: STRING
+        reserved_ip_ranges:
+          defaultValue: []
+          isOptional: true
+          parameterType: LIST
+        restart_job_on_worker_restart:
+          defaultValue: false
+          isOptional: true
+          parameterType: BOOLEAN
+        service_account:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        strategy:
+          defaultValue: STANDARD
+          isOptional: true
+          parameterType: STRING
+        tensorboard:
+          defaultValue: ''
+          isOptional: true
+          parameterType: STRING
+        time_column:
+          parameterType: STRING
+        timeout:
+          defaultValue: 604800s
+          isOptional: true
+          parameterType: STRING
+        worker_pool_specs:
+          defaultValue:
+          - container_spec:
+              args:
+              - --executor_input
+              - '{{$.json_escape[1]}}'
+              - --function_to_execute
+              - generate_time_series_cv_op
+              command:
+              - sh
+              - -c
+              - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip\
+                \ || python3 -m ensurepip --user || apt-get install python3-pip\n\
+                fi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet\
+                \ --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5;\
+                \ python_version<\"3.9\"' && \"$0\" \"$@\"\n"
+              - sh
+              - -ec
+              - 'program_path=$(mktemp -d)
+
+
+                printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+                _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+                '
+              - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing\
+                \ import *\n\ndef generate_time_series_cv_op(\n    input_dataset:\
+                \ Input[Dataset],\n    time_column: str,\n    forecast_horizon: int,\n\
+                \    output_train: Output[Dataset],\n    output_test: Output[Dataset]\n\
+                ):\n    from src.ShortTermForecast.components.time_series_cv import\
+                \ TimeSeriesCV\n    from src.ShortTermForecast.config.configuration\
+                \ import ConfigurationManager\n\n    config = ConfigurationManager(\n\
+                \        config_filepath=None, \n        params_filepath=None\n  \
+                \  )\n\n    time_series_cv_config = config.get_cross_validation_split_kfp_config(\n\
+                \        input_dataset=input_dataset.path,\n        time_column=time_column,\n\
+                \        forecast_horizon=forecast_horizon,\n    )\n\n    time_series_cv\
+                \ = TimeSeriesCV(time_series_cv_config)\n\n    time_series_cv.load()\n\
+                \    time_series_cv.generate_splits()\n    time_series_cv.process_splits()\n\
+                \    time_series_cv.save(\n        save_train_path=output_train.path,\n\
+                \        save_test_path=output_test.path\n    )\n\n"
+              env: []
+              image_uri: northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.1-rc
+            disk_spec:
+              boot_disk_size_gb: 100.0
+              boot_disk_type: pd-ssd
+            machine_spec:
+              machine_type: e2-standard-4
+            replica_count: 1.0
+          isOptional: true
+          parameterType: LIST
+    outputDefinitions:
+      artifacts:
+        output_test:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+        output_train:
+          artifactType:
+            schemaTitle: system.Dataset
+            schemaVersion: 0.0.1
+      parameters:
+        gcp_resources:
+          parameterType: STRING
+deploymentSpec:
+  executors:
+    exec-data-ingestion-op:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "{{$.inputs.parameters[''display_name'']}}", "job_spec":
+          {"worker_pool_specs": {{$.inputs.parameters[''worker_pool_specs'']}}, "scheduling":
+          {"timeout": "{{$.inputs.parameters[''timeout'']}}", "restart_job_on_worker_restart":
+          {{$.inputs.parameters[''restart_job_on_worker_restart'']}}, "strategy":
+          "{{$.inputs.parameters[''strategy'']}}", "max_wait_duration": "{{$.inputs.parameters[''max_wait_duration'']}}"},
+          "service_account": "{{$.inputs.parameters[''service_account'']}}", "tensorboard":
+          "{{$.inputs.parameters[''tensorboard'']}}", "enable_web_access": {{$.inputs.parameters[''enable_web_access'']}},
+          "network": "{{$.inputs.parameters[''network'']}}", "reserved_ip_ranges":
+          {{$.inputs.parameters[''reserved_ip_ranges'']}}, "base_output_directory":
+          {"output_uri_prefix": "{{$.inputs.parameters[''base_output_directory'']}}"},
+          "persistent_resource_id": "{{$.inputs.parameters[''persistent_resource_id'']}}"},
+          "labels": {{$.inputs.parameters[''labels'']}}, "encryption_spec": {"kms_key_name":
+          "{{$.inputs.parameters[''encryption_spec_key_name'']}}"}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.19.0
+    exec-generate-time-series-cv-op:
+      container:
+        args:
+        - --type
+        - CustomJob
+        - --payload
+        - '{"display_name": "{{$.inputs.parameters[''display_name'']}}", "job_spec":
+          {"worker_pool_specs": {{$.inputs.parameters[''worker_pool_specs'']}}, "scheduling":
+          {"timeout": "{{$.inputs.parameters[''timeout'']}}", "restart_job_on_worker_restart":
+          {{$.inputs.parameters[''restart_job_on_worker_restart'']}}, "strategy":
+          "{{$.inputs.parameters[''strategy'']}}", "max_wait_duration": "{{$.inputs.parameters[''max_wait_duration'']}}"},
+          "service_account": "{{$.inputs.parameters[''service_account'']}}", "tensorboard":
+          "{{$.inputs.parameters[''tensorboard'']}}", "enable_web_access": {{$.inputs.parameters[''enable_web_access'']}},
+          "network": "{{$.inputs.parameters[''network'']}}", "reserved_ip_ranges":
+          {{$.inputs.parameters[''reserved_ip_ranges'']}}, "base_output_directory":
+          {"output_uri_prefix": "{{$.inputs.parameters[''base_output_directory'']}}"},
+          "persistent_resource_id": "{{$.inputs.parameters[''persistent_resource_id'']}}"},
+          "labels": {{$.inputs.parameters[''labels'']}}, "encryption_spec": {"kms_key_name":
+          "{{$.inputs.parameters[''encryption_spec_key_name'']}}"}}'
+        - --project
+        - '{{$.inputs.parameters[''project'']}}'
+        - --location
+        - '{{$.inputs.parameters[''location'']}}'
+        - --gcp_resources
+        - '{{$.outputs.parameters[''gcp_resources''].output_file}}'
+        command:
+        - python3
+        - -u
+        - -m
+        - google_cloud_pipeline_components.container.v1.custom_job.launcher
+        image: gcr.io/ml-pipeline/google-cloud-pipeline-components:2.19.0
+pipelineInfo:
+  description: A Kubeflow pipeline for training forecast models using AutoML Forecast
+    on Vertex AI Pipelines from a BigQuery view.
+  name: b2b-wf-short-term-prediction-experiments
+root:
+  dag:
+    tasks:
+      data-ingestion-op:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-data-ingestion-op
+        inputs:
+          parameters:
+            attribute_columns:
+              componentInputParameter: attribute_columns
+            bq_dataset:
+              componentInputParameter: bq_dataset
+            bq_source_table:
+              componentInputParameter: bq_source_table
+            project_id:
+              componentInputParameter: project_id
+            project_location:
+              componentInputParameter: project_location
+            series_identifier:
+              componentInputParameter: series_identifier
+            target_column:
+              componentInputParameter: target_column
+            time_column:
+              componentInputParameter: time_column
+        taskInfo:
+          name: data-ingestion-op
+      generate-time-series-cv-op:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-generate-time-series-cv-op
+        dependentTasks:
+        - data-ingestion-op
+        inputs:
+          artifacts:
+            input_dataset:
+              taskOutputArtifact:
+                outputArtifactKey: output_dataset
+                producerTask: data-ingestion-op
+          parameters:
+            forecast_horizon:
+              componentInputParameter: forecast_horizon
+            time_column:
+              componentInputParameter: time_column
+        taskInfo:
+          name: generate-time-series-cv-op
+  inputDefinitions:
+    parameters:
+      attribute_columns:
+        parameterType: LIST
+      bq_dataset:
+        parameterType: STRING
+      bq_source_table:
+        parameterType: STRING
+      forecast_horizon:
+        parameterType: NUMBER_INTEGER
+      project_id:
+        parameterType: STRING
+      project_location:
+        parameterType: STRING
+      series_identifier:
+        parameterType: STRING
+      target_column:
+        parameterType: STRING
+      time_column:
+        parameterType: STRING
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.10.1

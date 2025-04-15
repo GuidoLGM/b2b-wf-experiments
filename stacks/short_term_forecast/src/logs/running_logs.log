@@ -1,0 +1,41 @@
+[2025-04-15 17:32:59,400: INFO: 1731669044] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 17:32:59,404: ERROR: 1731669044] [Errno 2] No such file or directory: 'config/config.yaml'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_1549/1731669044.py", line 18, in <module>
+    obj.main()
+  File "/tmp/ipykernel_1549/1731669044.py", line 9, in main
+    config = ConfigurationManager()
+  File "/tmp/ipykernel_1549/3008690527.py", line 9, in __init__
+    self.config = read_yaml(config_filepath)
+  File "/opt/python/3.10/lib/python3.10/site-packages/ensure/main.py", line 849, in __call__
+    return_val = self.f(*args, **kwargs)
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 38, in read_yaml
+    raise e
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 31, in read_yaml
+    with open(path_to_yaml) as yaml_file:
+FileNotFoundError: [Errno 2] No such file or directory: 'config/config.yaml'
+[2025-04-15 17:37:49,256: INFO: 1731669044] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 17:37:49,264: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 17:37:49,275: INFO: common] Creating directory: artifacts
+[2025-04-15 17:37:49,277: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 17:37:49,280: ERROR: 1731669044] empty file
+Traceback (most recent call last):
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 34, in read_yaml
+    return ConfigBox(content)
+  File "box/box.py", line 259, in box.box.Box.__init__
+box.exceptions.BoxValueError: First argument must be mapping or iterable
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_1549/1731669044.py", line 18, in <module>
+    obj.main()
+  File "/tmp/ipykernel_1549/1731669044.py", line 9, in main
+    config = ConfigurationManager()
+  File "/tmp/ipykernel_1549/3008690527.py", line 13, in __init__
+    self.params = read_yaml(params_filepath)
+  File "/opt/python/3.10/lib/python3.10/site-packages/ensure/main.py", line 849, in __call__
+    return_val = self.f(*args, **kwargs)
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 36, in read_yaml
+    raise ValueError('empty file') from e
+ValueError: empty file

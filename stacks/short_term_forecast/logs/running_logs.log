@@ -1,0 +1,376 @@
+[2025-04-15 17:53:16,535: INFO: 1731669044] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 17:53:16,541: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 17:53:16,550: INFO: common] Creating directory: artifacts
+[2025-04-15 17:53:16,552: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 17:53:16,554: INFO: common] Creating directory: artifacts/data_ingestion
+[2025-04-15 17:53:16,555: INFO: 3841732962] DataIngestion instance initialized with provided configuration.
+[2025-04-15 17:53:16,556: INFO: 3841732962] Initializing BigQuery client and loading data.
+[2025-04-15 17:53:16,565: WARNING: _default] No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+[2025-04-15 17:54:34,478: INFO: 3841732962] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 17:54:34,479: INFO: 3841732962] Saving data to artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 17:54:37,538: INFO: 3841732962] Data saved successfully.
+[2025-04-15 17:54:37,551: INFO: 1731669044] >>>>>> stage Data Ingestion completed <<<<<<
+[2025-04-15 17:54:37,552: INFO: 1731669044] 
+x==================================================x
+[2025-04-15 18:04:26,714: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:11:43,899: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:12:04,945: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:12:10,081: INFO: base] Creating PipelineJob
+[2025-04-15 18:23:03,929: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 18:23:03,934: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:23:03,941: INFO: common] Creating directory: artifacts
+[2025-04-15 18:23:03,941: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:23:03,942: INFO: common] Creating directory: artifacts/data_ingestion
+[2025-04-15 18:23:03,942: INFO: data_ingestion] DataIngestion instance initialized with provided configuration.
+[2025-04-15 18:23:03,942: INFO: data_ingestion] Initializing BigQuery client and loading data.
+[2025-04-15 18:23:03,948: WARNING: _default] No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+[2025-04-15 18:24:46,120: INFO: data_ingestion] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 18:24:46,122: INFO: data_ingestion] Saving data to artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 18:24:49,653: INFO: data_ingestion] Data saved successfully.
+[2025-04-15 18:24:49,665: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion completed <<<<<<
+[2025-04-15 18:24:49,665: INFO: stage_00_data_ingestion] 
+x==================================================x
+[2025-04-15 18:27:26,327: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:27:29,215: INFO: base] Creating PipelineJob
+[2025-04-15 18:57:24,086: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 18:57:24,094: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:57:24,105: INFO: common] Creating directory: artifacts
+[2025-04-15 18:57:24,107: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:57:24,108: ERROR: 3118263232] ConfigurationManager.get_cross_validation_split_dvc_config() missing 3 required positional arguments: 'input_dataset', 'time_column', and 'forecast_horizon'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 10, in main
+    time_series_cv = TimeSeriesCV(config.get_cross_validation_split_dvc_config())
+TypeError: ConfigurationManager.get_cross_validation_split_dvc_config() missing 3 required positional arguments: 'input_dataset', 'time_column', and 'forecast_horizon'
+[2025-04-15 18:58:16,877: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 18:58:16,897: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:58:16,900: INFO: common] Creating directory: artifacts
+[2025-04-15 18:58:16,903: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:58:16,905: ERROR: 3118263232] 'ConfigurationManager' object has no attribute 'cross_validation'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 10, in main
+    time_series_cv = TimeSeriesCV(config.get_cross_validation_split_dvc_config())
+  File "/tmp/ipykernel_510/4002420212.py", line 27, in get_cross_validation_split_dvc_config
+    cross_validation_config = self.cross_validation
+AttributeError: 'ConfigurationManager' object has no attribute 'cross_validation'
+[2025-04-15 18:58:34,290: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 18:58:34,296: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:58:34,298: INFO: common] Creating directory: artifacts
+[2025-04-15 18:58:34,299: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:58:34,300: ERROR: 3118263232] 'ConfigurationManager' object has no attribute 'cross_validation'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 10, in main
+    time_series_cv = TimeSeriesCV(config.get_cross_validation_split_dvc_config())
+  File "/tmp/ipykernel_510/4002420212.py", line 27, in get_cross_validation_split_dvc_config
+    cross_validation_config = self.cross_validation
+AttributeError: 'ConfigurationManager' object has no attribute 'cross_validation'
+[2025-04-15 18:59:01,260: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 18:59:01,268: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:59:01,273: INFO: common] Creating directory: artifacts
+[2025-04-15 18:59:01,276: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:59:01,277: INFO: common] Creating directory: cross_validation
+[2025-04-15 18:59:01,280: ERROR: 3118263232] "'ConfigBox' object has no attribute 'train_file_name'"
+Traceback (most recent call last):
+  File "box/box.py", line 503, in box.box.Box.__getitem__
+KeyError: 'train_file_name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "box/box.py", line 536, in box.box.Box.__getattr__
+  File "box/box.py", line 524, in box.box.Box.__getitem__
+box.exceptions.BoxKeyError: "'train_file_name'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "box/box.py", line 538, in box.box.Box.__getattr__
+AttributeError: 'ConfigBox' object has no attribute 'train_file_name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "box/config_box.py", line 28, in box.config_box.ConfigBox.__getattr__
+  File "box/box.py", line 552, in box.box.Box.__getattr__
+box.exceptions.BoxKeyError: "'ConfigBox' object has no attribute 'train_file_name'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "box/box.py", line 503, in box.box.Box.__getitem__
+KeyError: 'train_file_name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "box/box.py", line 536, in box.box.Box.__getattr__
+  File "box/box.py", line 524, in box.box.Box.__getitem__
+box.exceptions.BoxKeyError: "'train_file_name'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "box/box.py", line 538, in box.box.Box.__getattr__
+AttributeError: 'ConfigBox' object has no attribute 'train_file_name'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 10, in main
+    time_series_cv = TimeSeriesCV(config.get_cross_validation_split_dvc_config())
+  File "/tmp/ipykernel_510/2495673375.py", line 36, in get_cross_validation_split_dvc_config
+    train_file_name=general_configs.train_file_name,
+  File "box/config_box.py", line 30, in box.config_box.ConfigBox.__getattr__
+  File "box/box.py", line 552, in box.box.Box.__getattr__
+box.exceptions.BoxKeyError: "'ConfigBox' object has no attribute 'train_file_name'"
+[2025-04-15 18:59:33,358: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 18:59:33,363: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 18:59:33,365: INFO: common] Creating directory: artifacts
+[2025-04-15 18:59:33,367: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 18:59:33,369: INFO: common] Creating directory: cross_validation
+[2025-04-15 18:59:33,370: INFO: 1670283927] TimeSeriesCV instance initialized with provided configuration.
+[2025-04-15 18:59:33,371: INFO: 1670283927] Reading input dataset from: artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 18:59:33,950: INFO: 1670283927] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 18:59:33,951: INFO: 1670283927] Generating time series cross-validation splits
+[2025-04-15 18:59:33,963: INFO: 1670283927] Generated splits:
+[2025-04-15 18:59:33,967: INFO: 1670283927] Split 1:
+[2025-04-15 18:59:33,971: INFO: 1670283927]   Train: 2022-01-01 to 2024-03-31
+[2025-04-15 18:59:33,976: INFO: 1670283927]   Test:  2024-04-01 to 2024-06-30
+[2025-04-15 18:59:33,977: INFO: 1670283927] Split 2:
+[2025-04-15 18:59:33,978: INFO: 1670283927]   Train: 2022-01-01 to 2024-06-30
+[2025-04-15 18:59:33,979: INFO: 1670283927]   Test:  2024-07-01 to 2024-09-29
+[2025-04-15 18:59:33,980: INFO: 1670283927] Split 3:
+[2025-04-15 18:59:33,981: INFO: 1670283927]   Train: 2022-01-01 to 2024-09-29
+[2025-04-15 18:59:33,982: INFO: 1670283927]   Test:  2024-09-30 to 2024-12-29
+[2025-04-15 18:59:33,983: INFO: 1670283927] Split 4:
+[2025-04-15 18:59:33,984: INFO: 1670283927]   Train: 2022-01-01 to 2024-12-29
+[2025-04-15 18:59:33,985: INFO: 1670283927]   Test:  2024-12-30 to 2025-03-30
+[2025-04-15 18:59:33,986: INFO: 1670283927] 
+Processing split 1
+[2025-04-15 18:59:33,994: ERROR: 3118263232] '>=' not supported between instances of 'str' and 'Timestamp'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 13, in main
+    time_series_cv.process_splits()
+  File "/tmp/ipykernel_510/1670283927.py", line 104, in process_splits
+    train_mask = (self.data[self.config.time_column] >= s["train_start"]) & \
+  File "/opt/python/3.10/lib/python3.10/site-packages/pandas/core/ops/common.py", line 76, in new_method
+    return method(self, other)
+  File "/opt/python/3.10/lib/python3.10/site-packages/pandas/core/arraylike.py", line 60, in __ge__
+    return self._cmp_method(other, operator.ge)
+  File "/opt/python/3.10/lib/python3.10/site-packages/pandas/core/series.py", line 6119, in _cmp_method
+    res_values = ops.comparison_op(lvalues, rvalues, op)
+  File "/opt/python/3.10/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 344, in comparison_op
+    res_values = comp_method_OBJECT_ARRAY(op, lvalues, rvalues)
+  File "/opt/python/3.10/lib/python3.10/site-packages/pandas/core/ops/array_ops.py", line 129, in comp_method_OBJECT_ARRAY
+    result = libops.scalar_compare(x.ravel(), y, op)
+  File "ops.pyx", line 107, in pandas._libs.ops.scalar_compare
+TypeError: '>=' not supported between instances of 'str' and 'Timestamp'
+[2025-04-15 19:01:47,471: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 19:01:47,477: ERROR: 3118263232] while parsing a block mapping
+  in "config/config.yaml", line 31, column 3
+expected <block end>, but found ':'
+  in "config/config.yaml", line 32, column 3
+Traceback (most recent call last):
+  File "/tmp/ipykernel_510/3118263232.py", line 20, in <module>
+    obj.main()
+  File "/tmp/ipykernel_510/3118263232.py", line 9, in main
+    config = ConfigurationManager()
+  File "/tmp/ipykernel_510/1405897417.py", line 16, in __init__
+    self.config = read_yaml(config_filepath)
+  File "/opt/python/3.10/lib/python3.10/site-packages/ensure/main.py", line 849, in __call__
+    return_val = self.f(*args, **kwargs)
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 38, in read_yaml
+    raise e
+  File "/workspaces/b2b-wf-experiments/stacks/short_term_forecast/src/ShortTermForecast/utils/common.py", line 32, in read_yaml
+    content = yaml.safe_load(yaml_file)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/__init__.py", line 125, in safe_load
+    return load(stream, SafeLoader)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/__init__.py", line 81, in load
+    return loader.get_single_data()
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/constructor.py", line 49, in get_single_data
+    node = self.get_single_node()
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 36, in get_single_node
+    document = self.compose_document()
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 55, in compose_document
+    node = self.compose_node(None, None)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 84, in compose_node
+    node = self.compose_mapping_node(anchor)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 133, in compose_mapping_node
+    item_value = self.compose_node(node, item_key)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 84, in compose_node
+    node = self.compose_mapping_node(anchor)
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/composer.py", line 127, in compose_mapping_node
+    while not self.check_event(MappingEndEvent):
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/parser.py", line 98, in check_event
+    self.current_event = self.state()
+  File "/opt/python/3.10/lib/python3.10/site-packages/yaml/parser.py", line 438, in parse_block_mapping_key
+    raise ParserError("while parsing a block mapping", self.marks[-1],
+yaml.parser.ParserError: while parsing a block mapping
+  in "config/config.yaml", line 31, column 3
+expected <block end>, but found ':'
+  in "config/config.yaml", line 32, column 3
+[2025-04-15 19:02:08,961: INFO: 3118263232] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 19:02:08,968: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:02:08,970: INFO: common] Creating directory: artifacts
+[2025-04-15 19:02:08,971: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 19:02:08,972: INFO: common] Creating directory: cross_validation
+[2025-04-15 19:02:08,972: INFO: 2254608862] TimeSeriesCV instance initialized with provided configuration.
+[2025-04-15 19:02:08,973: INFO: 2254608862] Reading input dataset from: artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 19:02:09,491: INFO: 2254608862] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 19:02:09,492: INFO: 2254608862] Generating time series cross-validation splits
+[2025-04-15 19:02:09,494: INFO: 2254608862] Generated splits:
+[2025-04-15 19:02:09,494: INFO: 2254608862] Split 1:
+[2025-04-15 19:02:09,495: INFO: 2254608862]   Train: 2022-01-01 to 2024-03-31
+[2025-04-15 19:02:09,497: INFO: 2254608862]   Test:  2024-04-01 to 2024-06-30
+[2025-04-15 19:02:09,498: INFO: 2254608862] Split 2:
+[2025-04-15 19:02:09,499: INFO: 2254608862]   Train: 2022-01-01 to 2024-06-30
+[2025-04-15 19:02:09,500: INFO: 2254608862]   Test:  2024-07-01 to 2024-09-29
+[2025-04-15 19:02:09,501: INFO: 2254608862] Split 3:
+[2025-04-15 19:02:09,502: INFO: 2254608862]   Train: 2022-01-01 to 2024-09-29
+[2025-04-15 19:02:09,503: INFO: 2254608862]   Test:  2024-09-30 to 2024-12-29
+[2025-04-15 19:02:09,504: INFO: 2254608862] Split 4:
+[2025-04-15 19:02:09,505: INFO: 2254608862]   Train: 2022-01-01 to 2024-12-29
+[2025-04-15 19:02:09,506: INFO: 2254608862]   Test:  2024-12-30 to 2025-03-30
+[2025-04-15 19:02:09,507: INFO: 2254608862] 
+Processing split 1
+[2025-04-15 19:02:09,520: INFO: 2254608862] Split 1 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:02:09,521: INFO: 2254608862] 
+Processing split 2
+[2025-04-15 19:02:09,526: INFO: 2254608862] Split 2 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:02:09,527: INFO: 2254608862] 
+Processing split 3
+[2025-04-15 19:02:09,532: INFO: 2254608862] Split 3 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:02:09,533: INFO: 2254608862] 
+Processing split 4
+[2025-04-15 19:02:09,537: INFO: 2254608862] Split 4 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:02:09,541: INFO: 2254608862] Saving combined training data (shape: (0, 12)) to cross_validation/cv_processed_train.csv
+[2025-04-15 19:02:09,546: INFO: 2254608862] Saving combined test data (shape: (0, 12)) to cross_validation/cv_processed_test.csv
+[2025-04-15 19:02:09,562: INFO: 3118263232] >>>>>> stage Cross Validation Split completed <<<<<<
+[2025-04-15 19:02:09,563: INFO: 3118263232] 
+x==================================================x
+[2025-04-15 19:07:43,769: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:07:46,643: INFO: base] Creating PipelineJob
+[2025-04-15 19:09:05,291: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 19:09:05,295: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:09:05,302: INFO: common] Creating directory: artifacts
+[2025-04-15 19:09:05,303: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 19:09:05,303: INFO: common] Creating directory: artifacts/data_ingestion
+[2025-04-15 19:09:05,303: INFO: data_ingestion] DataIngestion instance initialized with provided configuration.
+[2025-04-15 19:09:05,304: INFO: data_ingestion] Initializing BigQuery client and loading data.
+[2025-04-15 19:09:05,309: WARNING: _default] No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+[2025-04-15 19:10:42,223: INFO: data_ingestion] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 19:10:42,223: INFO: data_ingestion] Saving data to artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 19:10:45,248: INFO: data_ingestion] Data saved successfully.
+[2025-04-15 19:10:45,258: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion completed <<<<<<
+[2025-04-15 19:10:45,258: INFO: stage_00_data_ingestion] 
+x==================================================x
+[2025-04-15 19:13:48,724: INFO: stage_01_time_series_cv] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 19:13:48,728: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:13:48,735: INFO: common] Creating directory: artifacts
+[2025-04-15 19:13:48,736: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 19:13:48,736: INFO: common] Creating directory: cross_validation
+[2025-04-15 19:13:48,736: INFO: time_series_cv] TimeSeriesCV instance initialized with provided configuration.
+[2025-04-15 19:13:48,736: INFO: time_series_cv] Reading input dataset from: artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 19:13:49,316: INFO: time_series_cv] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 19:13:49,316: INFO: time_series_cv] Generating time series cross-validation splits
+[2025-04-15 19:13:49,331: INFO: time_series_cv] Generated splits:
+[2025-04-15 19:13:49,331: INFO: time_series_cv] Split 1:
+[2025-04-15 19:13:49,331: INFO: time_series_cv]   Train: 2022-01-01 to 2024-03-31
+[2025-04-15 19:13:49,332: INFO: time_series_cv]   Test:  2024-04-01 to 2024-06-30
+[2025-04-15 19:13:49,332: INFO: time_series_cv] Split 2:
+[2025-04-15 19:13:49,332: INFO: time_series_cv]   Train: 2022-01-01 to 2024-06-30
+[2025-04-15 19:13:49,332: INFO: time_series_cv]   Test:  2024-07-01 to 2024-09-29
+[2025-04-15 19:13:49,332: INFO: time_series_cv] Split 3:
+[2025-04-15 19:13:49,332: INFO: time_series_cv]   Train: 2022-01-01 to 2024-09-29
+[2025-04-15 19:13:49,332: INFO: time_series_cv]   Test:  2024-09-30 to 2024-12-29
+[2025-04-15 19:13:49,333: INFO: time_series_cv] Split 4:
+[2025-04-15 19:13:49,333: INFO: time_series_cv]   Train: 2022-01-01 to 2024-12-29
+[2025-04-15 19:13:49,333: INFO: time_series_cv]   Test:  2024-12-30 to 2025-03-30
+[2025-04-15 19:13:49,333: INFO: time_series_cv] 
+Processing split 1
+[2025-04-15 19:13:49,342: INFO: time_series_cv] Split 1 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:13:49,342: INFO: time_series_cv] 
+Processing split 2
+[2025-04-15 19:13:49,346: INFO: time_series_cv] Split 2 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:13:49,346: INFO: time_series_cv] 
+Processing split 3
+[2025-04-15 19:13:49,349: INFO: time_series_cv] Split 3 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:13:49,349: INFO: time_series_cv] 
+Processing split 4
+[2025-04-15 19:13:49,353: INFO: time_series_cv] Split 4 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:13:49,356: INFO: time_series_cv] Saving combined training data (shape: (0, 12)) to cross_validation/cv_processed_train.csv
+[2025-04-15 19:13:49,359: INFO: time_series_cv] Saving combined test data (shape: (0, 12)) to cross_validation/cv_processed_test.csv
+[2025-04-15 19:13:49,369: INFO: stage_01_time_series_cv] >>>>>> stage Cross Validation Split completed <<<<<<
+[2025-04-15 19:13:49,370: INFO: stage_01_time_series_cv] 
+x==================================================x
+[2025-04-15 19:14:40,685: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion started <<<<<<
+[2025-04-15 19:14:40,690: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:14:40,697: INFO: common] Creating directory: artifacts
+[2025-04-15 19:14:40,698: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 19:14:40,699: INFO: common] Creating directory: artifacts/data_ingestion
+[2025-04-15 19:14:40,699: INFO: data_ingestion] DataIngestion instance initialized with provided configuration.
+[2025-04-15 19:14:40,699: INFO: data_ingestion] Initializing BigQuery client and loading data.
+[2025-04-15 19:14:40,706: WARNING: _default] No project ID could be determined. Consider running `gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
+[2025-04-15 19:16:03,853: INFO: data_ingestion] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 19:16:03,855: INFO: data_ingestion] Saving data to artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 19:16:07,901: INFO: data_ingestion] Data saved successfully.
+[2025-04-15 19:16:07,912: INFO: stage_00_data_ingestion] >>>>>> stage Data Ingestion completed <<<<<<
+[2025-04-15 19:16:07,912: INFO: stage_00_data_ingestion] 
+x==================================================x
+[2025-04-15 19:16:09,370: INFO: stage_01_time_series_cv] >>>>>> stage Cross Validation Split started <<<<<<
+[2025-04-15 19:16:09,374: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:16:09,382: INFO: common] Creating directory: artifacts
+[2025-04-15 19:16:09,384: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 19:16:09,384: INFO: common] Creating directory: artifacts/cross_validation
+[2025-04-15 19:16:09,385: INFO: time_series_cv] TimeSeriesCV instance initialized with provided configuration.
+[2025-04-15 19:16:09,385: INFO: time_series_cv] Reading input dataset from: artifacts/data_ingestion/fwds_daily_data.csv
+[2025-04-15 19:16:09,966: INFO: time_series_cv] Data loaded successfully. Shape: (299313, 11)
+[2025-04-15 19:16:09,966: INFO: time_series_cv] Generating time series cross-validation splits
+[2025-04-15 19:16:09,982: INFO: time_series_cv] Generated splits:
+[2025-04-15 19:16:09,982: INFO: time_series_cv] Split 1:
+[2025-04-15 19:16:09,983: INFO: time_series_cv]   Train: 2022-01-01 to 2024-03-31
+[2025-04-15 19:16:09,983: INFO: time_series_cv]   Test:  2024-04-01 to 2024-06-30
+[2025-04-15 19:16:09,983: INFO: time_series_cv] Split 2:
+[2025-04-15 19:16:09,983: INFO: time_series_cv]   Train: 2022-01-01 to 2024-06-30
+[2025-04-15 19:16:09,983: INFO: time_series_cv]   Test:  2024-07-01 to 2024-09-29
+[2025-04-15 19:16:09,984: INFO: time_series_cv] Split 3:
+[2025-04-15 19:16:09,984: INFO: time_series_cv]   Train: 2022-01-01 to 2024-09-29
+[2025-04-15 19:16:09,984: INFO: time_series_cv]   Test:  2024-09-30 to 2024-12-29
+[2025-04-15 19:16:09,984: INFO: time_series_cv] Split 4:
+[2025-04-15 19:16:09,985: INFO: time_series_cv]   Train: 2022-01-01 to 2024-12-29
+[2025-04-15 19:16:09,985: INFO: time_series_cv]   Test:  2024-12-30 to 2025-03-30
+[2025-04-15 19:16:09,985: INFO: time_series_cv] 
+Processing split 1
+[2025-04-15 19:16:09,996: INFO: time_series_cv] Split 1 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:16:09,996: INFO: time_series_cv] 
+Processing split 2
+[2025-04-15 19:16:10,001: INFO: time_series_cv] Split 2 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:16:10,002: INFO: time_series_cv] 
+Processing split 3
+[2025-04-15 19:16:10,006: INFO: time_series_cv] Split 3 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:16:10,006: INFO: time_series_cv] 
+Processing split 4
+[2025-04-15 19:16:10,010: INFO: time_series_cv] Split 4 - Train shape: (0, 12), Test shape: (0, 12)
+[2025-04-15 19:16:10,014: INFO: time_series_cv] Saving combined training data (shape: (0, 12)) to artifacts/cross_validation/cv_processed_train.csv
+[2025-04-15 19:16:10,019: INFO: time_series_cv] Saving combined test data (shape: (0, 12)) to artifacts/cross_validation/cv_processed_test.csv
+[2025-04-15 19:16:10,032: INFO: stage_01_time_series_cv] >>>>>> stage Cross Validation Split completed <<<<<<
+[2025-04-15 19:16:10,032: INFO: stage_01_time_series_cv] 
+x==================================================x
+[2025-04-15 19:18:52,765: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:20:08,876: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:20:12,224: INFO: base] Creating PipelineJob
+[2025-04-15 19:38:53,872: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:38:59,993: INFO: base] Creating PipelineJob
+[2025-04-15 19:53:41,709: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:53:44,627: INFO: base] Creating PipelineJob
+[2025-04-15 19:55:53,501: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 19:55:56,866: INFO: base] Creating PipelineJob
