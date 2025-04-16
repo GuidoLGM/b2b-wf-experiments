@@ -374,3 +374,91 @@ x==================================================x
 [2025-04-15 19:53:44,627: INFO: base] Creating PipelineJob
 [2025-04-15 19:55:53,501: INFO: common] yaml file: config/config.yaml loaded successfully
 [2025-04-15 19:55:56,866: INFO: base] Creating PipelineJob
+[2025-04-15 20:05:47,206: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:05:50,523: INFO: base] Creating PipelineJob
+[2025-04-15 20:19:09,898: INFO: 3314175499] >>>>>> stage Dataset Statistics Generation started <<<<<<
+[2025-04-15 20:19:09,905: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:19:09,917: INFO: common] Creating directory: artifacts
+[2025-04-15 20:19:09,918: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 20:19:09,920: INFO: common] Creating directory: artifacts/dataset_statistics
+[2025-04-15 20:19:09,921: ERROR: 3314175499] DatasetStatisticsConfig.__init__() got an unexpected keyword argument 'root_dir'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_14580/3314175499.py", line 18, in <module>
+    obj.main()
+  File "/tmp/ipykernel_14580/3314175499.py", line 11, in main
+    dataset_statistics = DatasetStatistics(config.get_dataset_statistics_dvc_config())
+  File "/tmp/ipykernel_14580/967794615.py", line 22, in get_dataset_statistics_dvc_config
+    return DatasetStatisticsConfig(
+TypeError: DatasetStatisticsConfig.__init__() got an unexpected keyword argument 'root_dir'
+[2025-04-15 20:20:37,613: INFO: 3603232476] >>>>>> stage Dataset Statistics Generation started <<<<<<
+[2025-04-15 20:20:37,620: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:20:37,629: INFO: common] Creating directory: artifacts
+[2025-04-15 20:20:37,631: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 20:20:37,633: INFO: common] Creating directory: artifacts/dataset_statistics
+[2025-04-15 20:20:37,634: ERROR: 3603232476] DatasetStatisticsConfig.__init__() got an unexpected keyword argument 'root_dir'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_16198/3603232476.py", line 19, in <module>
+    obj.main()
+  File "/tmp/ipykernel_16198/3603232476.py", line 11, in main
+    dataset_statistics = DatasetStatistics(config.get_dataset_statistics_dvc_config())
+  File "/tmp/ipykernel_16198/363828313.py", line 21, in get_dataset_statistics_dvc_config
+    return DatasetStatisticsConfig(
+TypeError: DatasetStatisticsConfig.__init__() got an unexpected keyword argument 'root_dir'
+[2025-04-15 20:21:02,928: INFO: 3603232476] >>>>>> stage Dataset Statistics Generation started <<<<<<
+[2025-04-15 20:21:02,935: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:21:02,943: INFO: common] Creating directory: artifacts
+[2025-04-15 20:21:02,947: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 20:21:02,949: INFO: common] Creating directory: artifacts/dataset_statistics
+[2025-04-15 20:21:02,950: ERROR: 3603232476] 'DatasetStatistics' object has no attribute 'logger'
+Traceback (most recent call last):
+  File "/tmp/ipykernel_16293/3603232476.py", line 19, in <module>
+    obj.main()
+  File "/tmp/ipykernel_16293/3603232476.py", line 12, in main
+    dataset_statistics.generate_statistics()
+  File "/tmp/ipykernel_16293/2205142238.py", line 49, in generate_statistics
+    self.logger.info("Reading input datasets")
+AttributeError: 'DatasetStatistics' object has no attribute 'logger'
+[2025-04-15 20:21:33,851: INFO: 3603232476] >>>>>> stage Dataset Statistics Generation started <<<<<<
+[2025-04-15 20:21:33,857: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:21:33,866: INFO: common] Creating directory: artifacts
+[2025-04-15 20:21:33,868: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 20:21:33,870: INFO: common] Creating directory: artifacts/dataset_statistics
+[2025-04-15 20:21:33,871: INFO: 3019049701] Reading input datasets
+[2025-04-15 20:21:33,904: INFO: 3019049701] Processing training splits
+[2025-04-15 20:21:33,909: INFO: 3019049701] Processing training split 1 (shape: (0, 12))
+[2025-04-15 20:21:33,911: ERROR: 3603232476] NaTType does not support strftime
+Traceback (most recent call last):
+  File "/tmp/ipykernel_16429/3603232476.py", line 19, in <module>
+    obj.main()
+  File "/tmp/ipykernel_16429/3603232476.py", line 12, in main
+    dataset_statistics.generate_statistics()
+  File "/tmp/ipykernel_16429/3019049701.py", line 63, in generate_statistics
+    all_statistics[f"train_split_{split_index}"] = self.calculate_statistics(split_train, "train", split_index)
+  File "/tmp/ipykernel_16429/3019049701.py", line 22, in calculate_statistics
+    "start": date_range_start.strftime("%Y-%m-%d"),
+  File "nattype.pyx", line 54, in pandas._libs.tslibs.nattype._make_error_func.f
+ValueError: NaTType does not support strftime
+[2025-04-15 20:25:12,065: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:25:15,246: INFO: base] Creating PipelineJob
+[2025-04-15 20:28:31,551: INFO: 3603232476] >>>>>> stage Dataset Statistics Generation started <<<<<<
+[2025-04-15 20:28:31,557: INFO: common] yaml file: config/config.yaml loaded successfully
+[2025-04-15 20:28:31,560: INFO: common] Creating directory: artifacts
+[2025-04-15 20:28:31,562: INFO: common] yaml file: params.yaml loaded successfully
+[2025-04-15 20:28:31,564: INFO: common] Creating directory: artifacts/dataset_statistics
+[2025-04-15 20:28:31,565: INFO: 3781864347] Reading input datasets
+[2025-04-15 20:28:31,574: INFO: 3781864347] Processing training splits
+[2025-04-15 20:28:31,576: INFO: 3781864347] Processing training split 1 (shape: (0, 12))
+[2025-04-15 20:28:31,598: INFO: 3781864347] Processing training split 2 (shape: (0, 12))
+[2025-04-15 20:28:31,607: INFO: 3781864347] Processing training split 3 (shape: (0, 12))
+[2025-04-15 20:28:31,615: INFO: 3781864347] Processing training split 4 (shape: (0, 12))
+[2025-04-15 20:28:31,624: INFO: 3781864347] Processing test splits
+[2025-04-15 20:28:31,626: INFO: 3781864347] Processing test split 1 (shape: (0, 12))
+[2025-04-15 20:28:31,637: INFO: 3781864347] Processing test split 2 (shape: (0, 12))
+[2025-04-15 20:28:31,648: INFO: 3781864347] Processing test split 3 (shape: (0, 12))
+[2025-04-15 20:28:31,658: INFO: 3781864347] Processing test split 4 (shape: (0, 12))
+[2025-04-15 20:28:31,666: INFO: 3781864347] Calculating overall statistics
+[2025-04-15 20:28:31,679: INFO: 3781864347] Saving statistics to artifacts/dataset_statistics/data_stats.json
+[2025-04-15 20:28:31,684: INFO: 3781864347] Statistics saved successfully
+[2025-04-15 20:28:31,685: INFO: 3603232476] >>>>>> stage Dataset Statistics Generation completed <<<<<<
+[2025-04-15 20:28:31,686: INFO: 3603232476] 
+x==================================================x

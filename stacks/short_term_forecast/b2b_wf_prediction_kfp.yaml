@@ -127,76 +127,7 @@ components:
                 \ str,\n    bq_dataset: str,\n    bq_source_table: str,\n    time_column:\
                 \ str,\n    target_column: str,\n    series_identifier: str,\n   \
                 \ attribute_columns: List[str],\n    output_dataset: Output[Dataset]\n\
-                ):\n    from dataclasses import dataclass\n    from google.cloud import\
-                \ bigquery\n    from pathlib import Path\n    from typing import List\n\
-                \    import os\n    import sys\n    import logging\n\n\n    logging_str\
-                \ = \"[%(asctime)s: %(levelname)s: %(module)s] %(message)s\"\n\n \
-                \   log_dir = 'logs'\n    log_pathfile = os.path.join(log_dir, 'running_logs.log')\n\
-                \    os.makedirs(log_dir, exist_ok=True)\n\n    logging.basicConfig(\n\
-                \        level=logging.INFO,\n        format=logging_str,\n\n    \
-                \    handlers=[\n            logging.FileHandler(log_pathfile),\n\
-                \            logging.StreamHandler(sys.stdout)\n        ]\n    )\n\
-                \n    logger = logging.getLogger(\"Match-Analysis\")\n\n    @dataclass(frozen=True)\n\
-                \    class DataIngestionConfig:\n        root_dir: Path\n        local_file_name:\
-                \ str\n        project_id: str\n        project_location: str\n  \
-                \      bq_dataset: str\n        bq_source_table: str\n        time_column:\
-                \ str\n        target_column: str\n        series_identifier: str\n\
-                \        attribute_columns: List[str]\n\n    class ConfigurationManager:\n\
-                \        def __init__(self):\n            pass\n        def get_data_ingestion_kfp_config(\n\
-                \                self,\n                project_id: str,\n       \
-                \         project_location: str,\n                bq_dataset: str,\n\
-                \                bq_source_table: str,\n                time_column:\
-                \ str,\n                target_column: str,\n                series_identifier:\
-                \ str,\n                attribute_columns: List[str]\n        ) ->\
-                \ DataIngestionConfig:\n            \"\"\"\n            Returns a\
-                \ DataIngestionConfig configured for Kubeflow Pipeline runs.\n   \
-                \         \"\"\"\n\n            return DataIngestionConfig(\n    \
-                \            root_dir=None,\n                local_file_name=None,\n\
-                \                project_id=project_id,\n                project_location=project_location,\n\
-                \                bq_dataset=bq_dataset,\n                bq_source_table=bq_source_table,\n\
-                \                time_column=time_column,\n                target_column=target_column,\n\
-                \                series_identifier=series_identifier,\n          \
-                \      attribute_columns=attribute_columns\n            )        \n\
-                \n    class DataIngestion:\n        def __init__(self, config: DataIngestionConfig):\n\
-                \            self.config = config\n            self.client = None\n\
-                \            self.data = None\n            logger.info(\"DataIngestion\
-                \ instance initialized with provided configuration.\")\n\n       \
-                \ def _create_series_identifier(self) -> str:\n            coalesce_parts\
-                \ = [f\"COALESCE({column}, 'None')\" for column in self.config.attribute_columns]\n\
-                \            separator = \"' '\"\n            series_identifier =\
-                \ f\"CONCAT({f', {separator}, '.join(coalesce_parts)}) AS {self.config.series_identifier}\"\
-                \n            logger.debug(f\"Created series identifier: {series_identifier}\"\
-                )\n            return series_identifier\n\n        def load(self):\n\
-                \            logger.info(\"Initializing BigQuery client and loading\
-                \ data.\")\n            self.client = bigquery.Client(\n         \
-                \       project=self.config.project_id,\n                location=self.config.project_location\n\
-                \            )\n\n            try:\n                self.data = self.client.query(self.data_ingestion_query).to_dataframe()\n\
-                \                logger.info(f\"Data loaded successfully. Shape: {self.data.shape}\"\
-                )\n            except Exception as e:\n                logger.error(f\"\
-                Error loading data from BigQuery: {str(e)}\")\n                raise\n\
-                \n        def save(self, save_path: str = None):\n            if save_path\
-                \ is None:\n                save_path = Path(self.config.root_dir,\
-                \ self.config.local_file_name)\n\n            logger.info(f\"Saving\
-                \ data to {save_path}\")\n            try:\n                self.data.to_csv(save_path,\
-                \ index=False)\n                logger.info(\"Data saved successfully.\"\
-                )\n            except Exception as e:\n                logger.error(f\"\
-                Error saving data to CSV: {str(e)}\")\n                raise\n\n \
-                \       @property\n        def data_ingestion_query(self) -> str:\n\
-                \            query = f\"\"\"\n            WITH historical_table AS\
-                \ (\n                SELECT \n                    {self.config.time_column},\n\
-                \                    {self.attribute_string},\n                  \
-                \  SUM({self.config.target_column}) AS {self.config.target_column}\n\
-                \                FROM \n                    `{self.config.project_id}.{self.config.bq_dataset}.{self.config.bq_source_table}`\n\
-                \                WHERE \n                    {self.config.time_column}\
-                \ <= DATE('2025-03-31')\n                GROUP BY \n             \
-                \       {self.config.time_column},\n                    {self.attribute_string}\n\
-                \            )\n            SELECT \n                {self._create_series_identifier()},\n\
-                \                {self.config.time_column},\n                {self.attribute_string},\n\
-                \                {self.config.target_column}\n            FROM historical_table\n\
-                \            \"\"\"\n            logger.debug(\"Generated data ingestion\
-                \ query.\")\n            return query\n\n        @property\n     \
-                \   def attribute_string(self) -> str:\n            return ','.join(self.config.attribute_columns)\n\
-                \n    data_ingestion_config = ConfigurationManager().get_data_ingestion_kfp_config(\n\
+                ):\n\n    data_ingestion_config = ConfigurationManager().get_data_ingestion_kfp_config(\n\
                 \        project_id=project_id,\n        project_location=project_location,\n\
                 \        bq_dataset=bq_dataset,\n        bq_source_table=bq_source_table,\n\
                 \        time_column=time_column,\n        target_column=target_column,\n\
@@ -330,11 +261,82 @@ components:
                 \ import *\n\ndef generate_time_series_cv_op(\n    input_dataset:\
                 \ Input[Dataset],\n    time_column: str,\n    forecast_horizon: int,\n\
                 \    output_train: Output[Dataset],\n    output_test: Output[Dataset]\n\
-                ):\n    from src.ShortTermForecast.components.time_series_cv import\
-                \ TimeSeriesCV\n    from src.ShortTermForecast.config.configuration\
-                \ import ConfigurationManager\n\n    config = ConfigurationManager(\n\
-                \        config_filepath=None, \n        params_filepath=None\n  \
-                \  )\n\n    time_series_cv_config = config.get_cross_validation_split_kfp_config(\n\
+                ):\n    from dataclasses import dataclass\n    from pathlib import\
+                \ Path\n    import logging\n    import pandas as pd\n    from datetime\
+                \ import timedelta\n    from pathlib import Path\n\n\n    logging_str\
+                \ = \"[%(asctime)s: %(levelname)s: %(module)s] %(message)s\"\n\n \
+                \   logging.basicConfig(\n        level=logging.INFO,\n        format=logging_str\n\
+                \    )\n\n    logger = logging.getLogger(\"Match-Analysis\")\n\n \
+                \   @dataclass(frozen=True)\n    class CrossValSplitConfig:\n    \
+                \    root_dir: Path\n        input_dataset: Path\n        time_column:\
+                \ str\n        forecast_horizon: int\n        train_file_name: str\n\
+                \        test_file_name: str\n\n    class ConfigurationManager:\n\
+                \        def __init__(self):\n            pass\n        def get_cross_validation_split_kfp_config(\n\
+                \                self,\n                input_dataset: str,\n    \
+                \            time_column: str,\n                forecast_horizon:\
+                \ int\n        ) -> CrossValSplitConfig:\n\n            return CrossValSplitConfig(\n\
+                \                root_dir=None,\n                input_dataset=input_dataset,\n\
+                \                time_column=time_column,\n                forecast_horizon=forecast_horizon,\n\
+                \                train_file_name=None,\n                test_file_name=None\n\
+                \            )   \n\n    class TimeSeriesCV:\n        def __init__(self,\
+                \ config: CrossValSplitConfig) -> None:\n            self.config =\
+                \ config\n            self.data = None\n            self.splits =\
+                \ None\n            logger.info(\"TimeSeriesCV instance initialized\
+                \ with provided configuration.\")\n\n        def load(self):\n   \
+                \         logger.info(f\"Reading input dataset from: {self.config.input_dataset}\"\
+                )\n            try:\n                self.data = pd.read_csv(self.config.input_dataset)\n\
+                \                self.data[self.config.time_column] = pd.to_datetime(self.data[self.config.time_column])\n\
+                \                logger.info(f\"Data loaded successfully. Shape: {self.data.shape}\"\
+                )\n            except Exception as e:\n                logger.error(f\"\
+                Error loading data: {str(e)}\")\n                raise\n\n       \
+                \ def generate_splits(self):\n            logger.info(\"Generating\
+                \ time series cross-validation splits\")\n\n            train_start\
+                \ = pd.to_datetime(\"2022-01-01\")\n            splits = []\n    \
+                \        current_train_end = pd.to_datetime(\"2024-03-31\")\n\n  \
+                \          for split_index in range(1, 5):\n                test_start\
+                \ = current_train_end + timedelta(days=1)\n                test_end\
+                \ = test_start + timedelta(days=self.config.forecast_horizon-1)\n\n\
+                \                splits.append({\n                    \"split_index\"\
+                : split_index,\n                    \"train_start\": train_start,\n\
+                \                    \"train_end\": current_train_end,\n         \
+                \           \"test_start\": test_start,\n                    \"test_end\"\
+                : test_end\n                })\n\n                current_train_end\
+                \ = test_end\n\n            self.splits = splits\n\n            logger.info(\"\
+                Generated splits:\")\n            for s in splits:\n             \
+                \   logger.info(f\"Split {s['split_index']}:\")\n                logger.info(f\"\
+                \  Train: {s['train_start'].strftime('%Y-%m-%d')} to {s['train_end'].strftime('%Y-%m-%d')}\"\
+                )\n                logger.info(f\"  Test:  {s['test_start'].strftime('%Y-%m-%d')}\
+                \ to {s['test_end'].strftime('%Y-%m-%d')}\")\n\n        def process_splits(self):\n\
+                \            if self.splits is None:\n                logger.error(\"\
+                Splits have not been generated. Call generate_splits() first.\")\n\
+                \                raise ValueError(\"Splits not generated\")\n\n  \
+                \          all_train_data = []\n            all_test_data = []\n\n\
+                \            for s in self.splits:\n                logger.info(f\"\
+                \\nProcessing split {s['split_index']}\")\n\n                train_mask\
+                \ = (self.data[self.config.time_column] >= s[\"train_start\"]) & \\\
+                \n                            (self.data[self.config.time_column]\
+                \ <= s[\"train_end\"])\n\n                test_mask = (self.data[self.config.time_column]\
+                \ >= s[\"test_start\"]) & \\\n                        (self.data[self.config.time_column]\
+                \ <= s[\"test_end\"])\n\n                train_df = self.data.loc[train_mask].copy()\n\
+                \                test_df = self.data.loc[test_mask].copy()\n\n   \
+                \             train_df['split_index'] = s['split_index']\n       \
+                \         test_df['split_index'] = s['split_index']\n\n          \
+                \      all_train_data.append(train_df)\n                all_test_data.append(test_df)\n\
+                \n                logger.info(f\"Split {s['split_index']} - Train\
+                \ shape: {train_df.shape}, Test shape: {test_df.shape}\")\n\n\n  \
+                \          self.train = pd.concat(all_train_data, ignore_index=True)\n\
+                \            self.test = pd.concat(all_test_data, ignore_index=True)\n\
+                \n        def save(self, save_train_path: str = None, save_test_path:\
+                \ str = None):\n            if save_train_path is None:\n        \
+                \        save_train_path = Path(self.config.root_dir, self.config.train_file_name)\n\
+                \            if save_test_path is None:\n                save_test_path\
+                \ = Path(self.config.root_dir, self.config.test_file_name)\n\n   \
+                \         logger.info(f\"Saving combined training data (shape: {self.train.shape})\
+                \ to {save_train_path}\")\n            self.train.to_csv(save_train_path,\
+                \ index=False)\n\n            logger.info(f\"Saving combined test\
+                \ data (shape: {self.test.shape}) to {save_test_path}\")\n       \
+                \     self.test.to_csv(save_test_path, index=False)\n\n\n    config\
+                \ = ConfigurationManager()\n\n    time_series_cv_config = config.get_cross_validation_split_kfp_config(\n\
                 \        input_dataset=input_dataset.path,\n        time_column=time_column,\n\
                 \        forecast_horizon=forecast_horizon,\n    )\n\n    time_series_cv\
                 \ = TimeSeriesCV(time_series_cv_config)\n\n    time_series_cv.load()\n\

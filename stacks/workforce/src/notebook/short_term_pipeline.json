@@ -50,6 +50,52 @@
         }
       }
     },
+    "comp-generate-model-report-card": {
+      "executorLabel": "exec-generate-model-report-card",
+      "inputDefinitions": {
+        "artifacts": {
+          "evaluation_metrics": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "statistics_artifact": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "trained_model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "series_identifier": {
+            "parameterType": "STRING"
+          },
+          "target_column": {
+            "parameterType": "STRING"
+          },
+          "time_column": {
+            "parameterType": "STRING"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "output_report": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      }
+    },
     "comp-generate-statistics-visualization": {
       "executorLabel": "exec-generate-statistics-visualization",
       "inputDefinitions": {
@@ -109,13 +155,14 @@
             "artifactType": {
               "schemaTitle": "system.Dataset",
               "schemaVersion": "0.0.1"
-            },
-            "description": "Input[Dataset]\nThe preprocessed CSV dataset containing time series data"
+            }
           }
         },
         "parameters": {
+          "forecast_horizon": {
+            "parameterType": "NUMBER_INTEGER"
+          },
           "time_column": {
-            "description": "str\nName of the column containing timestamps",
             "parameterType": "STRING"
           }
         }
@@ -131,6 +178,77 @@
           "output_train": {
             "artifactType": {
               "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      }
+    },
+    "comp-log-reports": {
+      "executorLabel": "exec-log-reports",
+      "inputDefinitions": {
+        "artifacts": {
+          "data_report": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "eval_report": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "experiment_run": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        }
+      }
+    },
+    "comp-model-evaluator-component": {
+      "executorLabel": "exec-model-evaluator-component",
+      "inputDefinitions": {
+        "artifacts": {
+          "experiment_run": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "test_dataset": {
+            "artifactType": {
+              "schemaTitle": "system.Dataset",
+              "schemaVersion": "0.0.1"
+            }
+          },
+          "trained_model": {
+            "artifactType": {
+              "schemaTitle": "system.Model",
+              "schemaVersion": "0.0.1"
+            }
+          }
+        },
+        "parameters": {
+          "series_identifier": {
+            "parameterType": "STRING"
+          },
+          "target_column": {
+            "parameterType": "STRING"
+          },
+          "time_column": {
+            "parameterType": "STRING"
+          }
+        }
+      },
+      "outputDefinitions": {
+        "artifacts": {
+          "output_metrics": {
+            "artifactType": {
+              "schemaTitle": "system.Artifact",
               "schemaVersion": "0.0.1"
             }
           }
@@ -183,55 +301,6 @@
         }
       }
     },
-    "comp-sma-evaluator-component": {
-      "executorLabel": "exec-sma-evaluator-component",
-      "inputDefinitions": {
-        "artifacts": {
-          "experiment_run": {
-            "artifactType": {
-              "schemaTitle": "system.Artifact",
-              "schemaVersion": "0.0.1"
-            }
-          },
-          "test_dataset": {
-            "artifactType": {
-              "schemaTitle": "system.Dataset",
-              "schemaVersion": "0.0.1"
-            }
-          },
-          "trained_model": {
-            "artifactType": {
-              "schemaTitle": "system.Model",
-              "schemaVersion": "0.0.1"
-            }
-          }
-        },
-        "parameters": {
-          "series_identifier": {
-            "parameterType": "STRING"
-          },
-          "target_column": {
-            "parameterType": "STRING"
-          },
-          "time_column": {
-            "parameterType": "STRING"
-          },
-          "window_size": {
-            "parameterType": "NUMBER_INTEGER"
-          }
-        }
-      },
-      "outputDefinitions": {
-        "artifacts": {
-          "metrics": {
-            "artifactType": {
-              "schemaTitle": "system.Artifact",
-              "schemaVersion": "0.0.1"
-            }
-          }
-        }
-      }
-    },
     "comp-sma-trainer-component": {
       "executorLabel": "exec-sma-trainer-component",
       "inputDefinitions": {
@@ -244,7 +313,60 @@
           }
         },
         "parameters": {
+          "base_output_directory": {
+            "defaultValue": "",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "display_name": {
+            "defaultValue": "sma-model-training",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "enable_web_access": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          },
+          "encryption_spec_key_name": {
+            "defaultValue": "",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
           "experiment_name": {
+            "parameterType": "STRING"
+          },
+          "forecast_horizon": {
+            "parameterType": "NUMBER_INTEGER"
+          },
+          "labels": {
+            "defaultValue": {},
+            "isOptional": true,
+            "parameterType": "STRUCT"
+          },
+          "location": {
+            "defaultValue": "{{$.pipeline_google_cloud_location}}",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "max_wait_duration": {
+            "defaultValue": "86400s",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "network": {
+            "defaultValue": "",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "persistent_resource_id": {
+            "defaultValue": "{{$.pipeline_persistent_resource_id}}",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "project": {
+            "defaultValue": "{{$.pipeline_google_cloud_project_id}}",
+            "isOptional": true,
             "parameterType": "STRING"
           },
           "project_id": {
@@ -253,17 +375,85 @@
           "project_location": {
             "parameterType": "STRING"
           },
+          "reserved_ip_ranges": {
+            "defaultValue": [],
+            "isOptional": true,
+            "parameterType": "LIST"
+          },
+          "restart_job_on_worker_restart": {
+            "defaultValue": false,
+            "isOptional": true,
+            "parameterType": "BOOLEAN"
+          },
+          "run_name": {
+            "parameterType": "STRING"
+          },
           "series_identifier": {
+            "parameterType": "STRING"
+          },
+          "service_account": {
+            "defaultValue": "notebook-service-account@wb-ai-acltr-tbs-3-pr-a62583.iam.gserviceaccount.com",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
+          "strategy": {
+            "defaultValue": "STANDARD",
+            "isOptional": true,
             "parameterType": "STRING"
           },
           "target_column": {
             "parameterType": "STRING"
           },
+          "tensorboard": {
+            "defaultValue": "",
+            "isOptional": true,
+            "parameterType": "STRING"
+          },
           "time_column": {
+            "parameterType": "STRING"
+          },
+          "timeout": {
+            "defaultValue": "604800s",
+            "isOptional": true,
             "parameterType": "STRING"
           },
           "window_size": {
             "parameterType": "NUMBER_INTEGER"
+          },
+          "worker_pool_specs": {
+            "defaultValue": [
+              {
+                "container_spec": {
+                  "args": [
+                    "--executor_input",
+                    "{{$.json_escape[1]}}",
+                    "--function_to_execute",
+                    "sma_trainer_component"
+                  ],
+                  "command": [
+                    "sh",
+                    "-c",
+                    "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
+                    "sh",
+                    "-ec",
+                    "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+                    "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef sma_trainer_component(\n    dataset: Input[Dataset],\n    experiment_name: str,\n    window_size: int,\n    project_id: str,\n    project_location: str,\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    forecast_horizon: int,\n    run_name: str,\n    output_model: Output[Model],\n    experiment_run: Output[Artifact]\n):\n    import pickle\n    from google.cloud import aiplatform\n    import pandas as pd\n    import numpy as np\n    from datetime import datetime, timedelta\n    import json\n    import logging\n\n    logging.basicConfig(\n        level=logging.INFO,\n        format='%(asctime)s - %(levelname)s - %(message)s'\n    )\n    logger = logging.getLogger(__name__)\n\n    def generate_rolling_predictions(values, window_size, horizon):\n        \"\"\"Generate predictions using a rolling window approach\"\"\"\n        predictions = []\n        rolling_window = np.array(values[-window_size:])\n\n        for _ in range(horizon):\n            next_pred = np.mean(rolling_window)\n            predictions.append(next_pred)\n            rolling_window = np.roll(rolling_window, -1)\n            rolling_window[-1] = next_pred\n\n        return predictions\n\n    logger.info(f\"Starting SMA trainer component with window size: {window_size}\")\n\n    logger.info(f\"Initializing Vertex AI SDK for project: {project_id}, location: {project_location}\")\n    aiplatform.init(project=project_id, location=project_location, experiment=experiment_name)\n\n    logger.info(f\"Reading dataset from: {dataset.path}\")\n    df = pd.read_csv(dataset.path, parse_dates=[time_column])\n    logger.info(f\"Dataset shape: {df.shape}\")\n\n    model_output = {\n        'model_type': 'SMA',\n        'parameters': {'window_size': window_size},\n        'predictions': {}\n    }\n\n    timestamp = datetime.now().strftime('%Y-%m-%d-%H%M')\n    run = aiplatform.start_run(f\"{run_name}-{timestamp}\")\n\n    unique_series = df[series_identifier].unique()\n    unique_splits = df['split_index'].unique()\n\n    total_combinations = len(unique_series) * len(unique_splits)\n    successful_predictions = 0\n\n    for series_id in unique_series:\n        for split_index in unique_splits:\n            series_data = df[\n                (df[series_identifier] == series_id) & \n                (df['split_index'] == split_index)\n            ].sort_values(time_column)\n\n            if len(series_data) == 0:\n                logger.warning(f\"No data for series {series_id}, split {split_index}\")\n                continue\n\n            try:\n                historical_values = series_data[target_column].values\n                future_predictions = generate_rolling_predictions(\n                    historical_values,\n                    window_size,\n                    forecast_horizon\n                )\n\n                last_date = series_data[time_column].iloc[-1]\n                future_dates = [(last_date + timedelta(days=i+1)).strftime('%Y-%m-%d')\n                              for i in range(forecast_horizon)]\n\n                model_output['predictions'][(series_id, split_index)] = {\n                    'series_id': series_id,\n                    'split_index': split_index,\n                    'timestamps': future_dates,\n                    'values': future_predictions,\n                    'metadata': {\n                        'last_training_date': last_date.strftime('%Y-%m-%d'),\n                        'window_size': window_size\n                    }\n                }\n                successful_predictions += 1\n            except Exception as e:\n                logger.error(f\"Error processing series {series_id}, split {split_index}: {str(e)}\")\n\n    logger.info(f\"Successfully processed {successful_predictions} out of {total_combinations} combinations\")\n\n    with open(output_model.path, \"wb\") as f:\n        pickle.dump(model_output, f)\n\n    run.log_params({\n        \"window_size\": window_size,\n        \"model_uri\": output_model.path,\n        \"forecast_horizon\": forecast_horizon,\n        \"total_series\": len(unique_series),\n        \"total_splits\": len(unique_splits)\n    })\n\n    run.log_metrics({\n        \"total_combinations\": total_combinations,\n        \"successful_predictions\": successful_predictions,\n        \"completion_rate\": successful_predictions / total_combinations\n    })\n\n    run_info = {\n        \"run_name\": run.name,\n        \"experiment\": experiment_name,\n        \"project_id\": project_id,\n        \"location\": project_location\n    }\n    with open(experiment_run.path, 'w') as f:\n        json.dump(run_info, f)\n\n    logger.info(\"SMA trainer component completed successfully\")\n\n"
+                  ],
+                  "env": [],
+                  "image_uri": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
+                },
+                "disk_spec": {
+                  "boot_disk_size_gb": 100.0,
+                  "boot_disk_type": "pd-ssd"
+                },
+                "machine_spec": {
+                  "machine_type": "e2-highcpu-16"
+                },
+                "replica_count": 1.0
+              }
+            ],
+            "isOptional": true,
+            "parameterType": "LIST"
           }
         }
       },
@@ -280,6 +470,11 @@
               "schemaTitle": "system.Model",
               "schemaVersion": "0.0.1"
             }
+          }
+        },
+        "parameters": {
+          "gcp_resources": {
+            "parameterType": "STRING"
           }
         }
       }
@@ -298,13 +493,33 @@
           "command": [
             "sh",
             "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
             "sh",
             "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_dataset_statistics(\n    train_dataset: Input[Dataset],\n    test_dataset: Input[Dataset],\n    time_column: str,\n    target_column: str,\n    attribute_columns: List[str],\n    output_statistics: Output[Artifact]\n) -> Dict[str, Dict[str, Dict[str, any]]]:\n    \"\"\"\n    Generates statistics for the training and test datasets produced by the generate_time_series_cv component.\n\n    This component analyzes the combined training and test datasets, which include a split_index column\n    identifying different temporal splits. It generates statistics for each split as well as overall statistics.\n\n    Args:\n        train_dataset: Input[Dataset]\n            Combined training dataset with split_index column\n        test_dataset: Input[Dataset]\n            Combined test dataset with split_index column\n        output_statistics: Output[Artifact]\n            Output artifact to store the generated statistics\n        time_column: str\n            Name of the timestamp column\n        target_column: str\n            Name of the target column (worked hours)\n        attribute_columns: List[str]\n            List of categorical columns (location, type of work, technology, product)\n\n    Returns:\n        Dict containing statistics for:\n        - Each training split (train_split_1 through train_split_4)\n        - Each test split (test_split_1 through test_split_4)\n        - Overall statistics combining all data\n    \"\"\"\n    import pandas as pd\n    import numpy as np\n    import json\n    import logging\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    def calculate_statistics(df: pd.DataFrame, dataset_type: str, split_number: int) -> Dict[str, any]:\n        stats = {\n            \"dataset_type\": dataset_type,\n            \"split_number\": split_number,\n            \"total_rows\": len(df),\n            \"date_range\": {\n                \"start\": df[time_column].min().strftime(\"%Y-%m-%d\"),\n                \"end\": df[time_column].max().strftime(\"%Y-%m-%d\")\n            },\n            \"target_column\": {\n                \"mean\": float(df[target_column].mean()),\n                \"median\": float(df[target_column].median()),\n                \"min\": float(df[target_column].min()),\n                \"max\": float(df[target_column].max()),\n                \"std\": float(df[target_column].std()),\n                \"total\": float(df[target_column].sum())\n            },\n            \"null_counts\": df.isnull().sum().to_dict(),\n            \"categorical_columns\": {}\n        }\n\n        for col in attribute_columns:\n            value_counts = df[col].value_counts()\n            stats[\"categorical_columns\"][col] = {\n                \"unique_values\": int(df[col].nunique()),\n                \"top_5_values\": value_counts.nlargest(5).to_dict(),\n                \"null_count\": int(df[col].isnull().sum()),\n                \"total_count\": int(len(df)),\n                \"distribution_percentage\": value_counts.nlargest(5).apply(lambda x: float(x/len(df) * 100)).to_dict()\n            }\n\n        return stats\n\n    all_statistics = {}\n\n    # Read datasets\n    logger.info(\"Reading input datasets\")\n    train_df = pd.read_csv(train_dataset.path, parse_dates=[time_column])\n    test_df = pd.read_csv(test_dataset.path, parse_dates=[time_column])\n\n    # Process each split in training data\n    logger.info(\"Processing training splits\")\n    for split_index in range(1, 5):\n        split_train = train_df[train_df['split_index'] == split_index]\n        logger.info(f\"Processing training split {split_index} (shape: {split_train.shape})\")\n        all_statistics[f\"train_split_{split_index}\"] = calculate_statistics(split_train, \"train\", split_index)\n\n    # Process each split in test data\n    logger.info(\"Processing test splits\")\n    for split_index in range(1, 5):\n        split_test = test_df[test_df['split_index'] == split_index]\n        logger.info(f\"Processing test split {split_index} (shape: {split_test.shape})\")\n        all_statistics[f\"test_split_{split_index}\"] = calculate_statistics(split_test, \"test\", split_index)\n\n    # Calculate overall statistics\n    logger.info(\"Calculating overall statistics\")\n    all_data = pd.concat([train_df, test_df])\n    all_statistics[\"overall\"] = calculate_statistics(all_data, \"overall\", 0)\n\n    # Add summary statistics\n    all_statistics[\"summary\"] = {\n        \"total_rows\": {\n            \"train\": len(train_df),\n            \"test\": len(test_df),\n            \"total\": len(all_data)\n        },\n        \"date_range\": {\n            \"earliest\": all_data[time_column].min().strftime(\"%Y-%m-%d\"),\n            \"latest\": all_data[time_column].max().strftime(\"%Y-%m-%d\")\n        },\n        \"splits_info\": {\n            f\"split_{i}\": {\n                \"train_rows\": len(train_df[train_df['split_index'] == i]),\n                \"test_rows\": len(test_df[test_df['split_index'] == i])\n            } for i in range(1, 5)\n        }\n    }\n\n    # Save statistics to a JSON file\n    logger.info(f\"Saving statistics to {output_statistics.path}\")\n    with open(output_statistics.path, \"w\") as f:\n        json.dump(all_statistics, f, indent=2)\n\n    logger.info(\"Statistics generation completed\")\n    return all_statistics\n\n"
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_dataset_statistics(\n    train_dataset: Input[Dataset],\n    test_dataset: Input[Dataset],\n    time_column: str,\n    target_column: str,\n    attribute_columns: List[str],\n    output_statistics: Output[Artifact]\n) -> Dict[str, Dict[str, Dict[str, any]]]:\n    \"\"\"\n    Generates statistics for the training and test datasets produced by the generate_time_series_cv component.\n\n    This component analyzes the combined training and test datasets, which include a split_index column\n    identifying different temporal splits. It generates statistics for each split as well as overall statistics.\n\n    Args:\n        train_dataset: Input[Dataset]\n            Combined training dataset with split_index column\n        test_dataset: Input[Dataset]\n            Combined test dataset with split_index column\n        output_statistics: Output[Artifact]\n            Output artifact to store the generated statistics\n        time_column: str\n            Name of the timestamp column\n        target_column: str\n            Name of the target column (worked hours)\n        attribute_columns: List[str]\n            List of categorical columns (location, type of work, technology, product)\n\n    Returns:\n        Dict containing statistics for:\n        - Each training split (train_split_1 through train_split_4)\n        - Each test split (test_split_1 through test_split_4)\n        - Overall statistics combining all data\n    \"\"\"\n    import pandas as pd\n    import json\n    import logging\n    from datetime import datetime\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    def calculate_statistics(df: pd.DataFrame, dataset_type: str, split_number: int) -> Dict[str, any]:\n        # Convert timestamp column to datetime if it's not already\n        if not pd.api.types.is_datetime64_any_dtype(df[time_column]):\n            df[time_column] = pd.to_datetime(df[time_column])\n\n        # Get date range as strings to avoid timestamp arithmetic\n        date_range_start = df[time_column].min()\n        date_range_end = df[time_column].max()\n\n        stats = {\n            \"dataset_type\": dataset_type,\n            \"split_number\": split_number,\n            \"total_rows\": len(df),\n            \"date_range\": {\n                \"start\": date_range_start.strftime(\"%Y-%m-%d\"),\n                \"end\": date_range_end.strftime(\"%Y-%m-%d\")\n            },\n            \"target_column\": {\n                \"mean\": float(df[target_column].mean()),\n                \"median\": float(df[target_column].median()),\n                \"min\": float(df[target_column].min()),\n                \"max\": float(df[target_column].max()),\n                \"std\": float(df[target_column].std()),\n                \"total\": float(df[target_column].sum())\n            },\n            \"null_counts\": df.isnull().sum().to_dict(),\n            \"categorical_columns\": {}\n        }\n\n        for col in attribute_columns:\n            value_counts = df[col].value_counts()\n            stats[\"categorical_columns\"][col] = {\n                \"unique_values\": int(df[col].nunique()),\n                \"top_5_values\": value_counts.nlargest(5).to_dict(),\n                \"null_count\": int(df[col].isnull().sum()),\n                \"total_count\": int(len(df)),\n                \"distribution_percentage\": value_counts.nlargest(5).apply(lambda x: float(x/len(df) * 100)).to_dict()\n            }\n\n        return stats\n\n    all_statistics = {}\n\n    logger.info(\"Reading input datasets\")\n    # Read CSVs with explicit datetime parsing\n    train_df = pd.read_csv(train_dataset.path)\n    test_df = pd.read_csv(test_dataset.path)\n\n    # Convert time column to datetime after reading\n    train_df[time_column] = pd.to_datetime(train_df[time_column])\n    test_df[time_column] = pd.to_datetime(test_df[time_column])\n\n    logger.info(\"Processing training splits\")\n    for split_index in range(1, 5):\n        split_train = train_df[train_df['split_index'] == split_index]\n        logger.info(f\"Processing training split {split_index} (shape: {split_train.shape})\")\n        all_statistics[f\"train_split_{split_index}\"] = calculate_statistics(split_train, \"train\", split_index)\n\n    logger.info(\"Processing test splits\")\n    for split_index in range(1, 5):\n        split_test = test_df[test_df['split_index'] == split_index]\n        logger.info(f\"Processing test split {split_index} (shape: {split_test.shape})\")\n        all_statistics[f\"test_split_{split_index}\"] = calculate_statistics(split_test, \"test\", split_index)\n\n    logger.info(\"Calculating overall statistics\")\n    all_data = pd.concat([train_df, test_df])\n    all_statistics[\"overall\"] = calculate_statistics(all_data, \"overall\", 0)\n\n    # Calculate summary statistics\n    earliest_date = all_data[time_column].min()\n    latest_date = all_data[time_column].max()\n\n    all_statistics[\"summary\"] = {\n        \"total_rows\": {\n            \"train\": len(train_df),\n            \"test\": len(test_df),\n            \"total\": len(all_data)\n        },\n        \"date_range\": {\n            \"earliest\": earliest_date.strftime(\"%Y-%m-%d\"),\n            \"latest\": latest_date.strftime(\"%Y-%m-%d\")\n        },\n        \"splits_info\": {\n            f\"split_{i}\": {\n                \"train_rows\": len(train_df[train_df['split_index'] == i]),\n                \"test_rows\": len(test_df[test_df['split_index'] == i])\n            } for i in range(1, 5)\n        }\n    }\n\n    logger.info(f\"Saving statistics to {output_statistics.path}\")\n    with open(output_statistics.path, \"w\") as f:\n        json.dump(all_statistics, f, indent=2)\n\n    logger.info(\"Statistics generation completed\")\n    return all_statistics\n\n"
           ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/mlops/kfp-2.0.0/kfp-load-model-slim:1.0.0"
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
+        }
+      },
+      "exec-generate-model-report-card": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "generate_model_report_card"
+          ],
+          "command": [
+            "sh",
+            "-c",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
+            "sh",
+            "-ec",
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_model_report_card(\n    evaluation_metrics: Input[Artifact],\n    statistics_artifact: Input[Artifact],\n    trained_model: Input[Model],  # Added to access model parameters\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    output_report: Output[Artifact]\n):\n    import json\n    import pandas as pd\n    import plotly.express as px\n    import plotly.graph_objects as go\n    from plotly.subplots import make_subplots\n    import logging\n    from datetime import datetime\n    import pickle\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    logger.info(\"Loading metrics, statistics, and model\")\n    with open(evaluation_metrics.path, 'r') as f:\n        metrics = json.load(f)\n    with open(statistics_artifact.path, 'r') as f:\n        stats = json.load(f)\n    with open(trained_model.path, 'rb') as f:\n        model_output = pickle.load(f)\n\n    def create_metrics_comparison():\n        logger.info(\"Creating metrics comparison plots\")\n\n        tiers = ['Overall', 'Tier 1', 'Tier 2', 'Tier 3']\n        metric_types = ['MAE', 'WAPE', 'RMSE', 'Bias']\n\n        fig = make_subplots(\n            rows=2, cols=2,\n            subplot_titles=metric_types,\n            vertical_spacing=0.15,\n            horizontal_spacing=0.1\n        )\n\n        colors = px.colors.qualitative.Set3\n\n        for idx, metric in enumerate(metric_types, 1):\n            row = ((idx-1) // 2) + 1\n            col = ((idx-1) % 2) + 1\n\n            values = []\n            for tier in tiers:\n                prefix = 'Overall_' if tier == 'Overall' else f\"{tier}_\"\n                key = f\"{prefix}{metric}\"\n                if key in metrics:\n                    values.append(metrics[key])\n                else:\n                    values.append(None)\n\n            fig.add_trace(\n                go.Bar(\n                    x=tiers,\n                    y=values,\n                    name=metric,\n                    text=[f'{v:.2f}' if v is not None else 'N/A' for v in values],\n                    textposition='auto',\n                    marker_color=colors[idx-1],\n                    showlegend=False\n                ),\n                row=row, col=col\n            )\n\n            fig.update_xaxes(title='Tier', row=row, col=col)\n            fig.update_yaxes(title=metric, row=row, col=col)\n\n        fig.update_layout(\n            height=800,\n            title_text=\"Model Performance Metrics by Tier\",\n            showlegend=False\n        )\n        return fig\n\n    def create_dataset_summary():\n        logger.info(\"Creating dataset summary\")\n\n        summary = stats['summary']\n        split_info = summary['splits_info']\n\n        fig = go.Figure(data=[go.Table(\n            header=dict(\n                values=['Metric', 'Value'],\n                fill_color='lightgrey',\n                align='left',\n                font=dict(size=14)\n            ),\n            cells=dict(\n                values=[\n                    [\n                        'Total Training Rows',\n                        'Total Test Rows',\n                        'Date Range',\n                        'Split 4 Training Rows',\n                        'Split 4 Test Rows'\n                    ],\n                    [\n                        f\"{summary['total_rows']['train']:,}\",\n                        f\"{summary['total_rows']['test']:,}\",\n                        f\"{summary['date_range']['earliest']} to {summary['date_range']['latest']}\",\n                        f\"{split_info['split_4']['train_rows']:,}\",\n                        f\"{split_info['split_4']['test_rows']:,}\"\n                    ]\n                ],\n                align='left',\n                font=dict(size=13)\n            )\n        )])\n\n        fig.update_layout(\n            title=\"Dataset Summary\",\n            height=300\n        )\n        return fig\n\n    def create_feature_summary():\n        logger.info(\"Creating detailed feature summary\")\n\n        split_stats = stats['train_split_4']\n\n        feature_names = []\n        null_counts = []\n        unique_values = []\n\n        feature_names.append(time_column)\n        null_counts.append(split_stats['null_counts'].get(time_column, 'N/A'))\n        unique_values.append('N/A (Date column)')\n\n        feature_names.append(target_column)\n        null_counts.append(split_stats['null_counts'].get(target_column, 'N/A'))\n        unique_values.append('N/A (Continuous)')\n\n        feature_names.append(series_identifier)\n        null_counts.append(split_stats['null_counts'].get(series_identifier, 'N/A'))\n        unique_values.append(split_stats['categorical_columns'].get(series_identifier, {}).get('unique_values', 'N/A'))\n\n        for col, col_stats in split_stats['categorical_columns'].items():\n            if col != series_identifier:\n                feature_names.append(col)\n                null_counts.append(split_stats['null_counts'].get(col, 'N/A'))\n                unique_values.append(col_stats['unique_values'])\n\n        fig = go.Figure(data=[go.Table(\n            header=dict(\n                values=['Feature', 'Null Count', 'Unique Values'],\n                fill_color='lightgrey',\n                align='left',\n                font=dict(size=14)\n            ),\n            cells=dict(\n                values=[feature_names, null_counts, unique_values],\n                align='left',\n                font=dict(size=13)\n            )\n        )])\n\n        fig.update_layout(\n            title=\"Feature Summary\",\n            height=400\n        )\n        return fig\n\n    def get_model_parameters_description():\n        \"\"\"Dynamically generate model parameters description based on model type\"\"\"\n        model_type = model_output['model_type']\n        parameters = model_output.get('parameters', {})\n\n        if model_type == 'SMA':\n            return f\"The Simple Moving Average model uses a window size of {parameters.get('window_size')} to generate predictions based on historical values.\"\n        elif model_type == 'SARIMA':\n            # For SARIMA, we'll show parameters from the first series as an example\n            first_series_params = next(iter(parameters.values()))\n            return (f\"The SARIMA model uses automatically determined parameters for each series. \"\n                   f\"Example parameters from one series - Order: {first_series_params.get('order')}, \"\n                   f\"Seasonal Order: {first_series_params.get('seasonal_order')}\")\n        else:\n            return f\"This is a {model_type} model. Refer to model documentation for specific parameter details.\"\n\n    figures = [\n        create_metrics_comparison(),\n        create_dataset_summary(),\n        create_feature_summary()\n    ]\n\n    html_parts = [\n        \"<!DOCTYPE html>\",\n        \"<html>\",\n        \"<head>\",\n        \"<title>Model Report Card</title>\",\n        \"<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>\",\n        \"<style>\",\n        \"body { margin: 20px; font-family: Arial, sans-serif; }\",\n        \".header { text-align: center; margin-bottom: 30px; }\",\n        \".plot { margin-bottom: 40px; }\",\n        \".metrics-summary { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }\",\n        \".section { margin-bottom: 40px; }\",\n        \"h2 { color: #2c3e50; }\",\n        \"</style>\",\n        \"</head>\",\n        \"<body>\",\n        \"<div class='header'>\",\n        \"<h1>Model Performance Report Card</h1>\",\n        f\"<p>Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>\",\n        \"</div>\",\n        \"<div class='section'>\",\n        \"<h2>Model Overview</h2>\",\n        f\"<p>This report presents the performance metrics of the {model_output['model_type']} model across different tiers, \",\n        \"along with dataset statistics and detailed feature information.</p>\",\n        f\"<p>{get_model_parameters_description()}</p>\",\n        \"</div>\"\n    ]\n\n    for fig in figures:\n        html_parts.append(f\"<div class='plot'>{fig.to_html(full_html=False, include_plotlyjs=False)}</div>\")\n\n    html_parts.extend([\n        \"<div class='section'>\",\n        \"<h2>Metrics Interpretation</h2>\",\n        \"<ul>\",\n        \"<li><strong>MAE (Mean Absolute Error):</strong> Average absolute difference between predicted and actual values.</li>\",\n        \"<li><strong>WAPE (Weighted Absolute Percentage Error):</strong> Percentage error weighted by the magnitude of actual values.</li>\",\n        \"<li><strong>RMSE (Root Mean Square Error):</strong> Square root of the average squared differences, penalizing larger errors.</li>\",\n        \"<li><strong>Bias:</strong> Average difference between predicted and actual values, indicating systematic over/under-prediction.</li>\",\n        \"</ul>\",\n        \"</div>\",\n        \"<div class='section'>\",\n        \"<h2>Feature Information</h2>\",\n        \"<ul>\",\n        f\"<li><strong>Time Column ({time_column}):</strong> Used to order the time series data.</li>\",\n        f\"<li><strong>Target Column ({target_column}):</strong> The variable being predicted by the model.</li>\",\n        f\"<li><strong>Series Identifier ({series_identifier}):</strong> Used to distinguish between different time series within the dataset.</li>\",\n        \"</ul>\",\n        \"</div>\",\n        \"</body>\",\n        \"</html>\"\n    ])\n\n    logger.info(f\"Saving HTML report to {output_report.path}\")\n    with open(output_report.path, \"w\") as f:\n        f.write(\"\\n\".join(html_parts))\n\n    logger.info(\"Report card generation completed\")\n\n"
+          ],
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
         }
       },
       "exec-generate-statistics-visualization": {
@@ -318,13 +533,13 @@
           "command": [
             "sh",
             "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
             "sh",
             "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_statistics_visualization(\n    statistics_artifact: Input[Artifact],\n    train_dataset: Input[Artifact],\n    test_dataset: Input[Artifact],\n    attribute_columns: List[str],\n    time_column: str,\n    target_column: str,\n    output_visualization: Output[Artifact]\n):\n    \"\"\"\n    Generates an interactive HTML report visualizing the statistics from the dataset analysis.\n    Focuses on train split 4 (which contains all historical data) and creates specific visualizations:\n    1. Categorical variables distribution\n    2. Time series visualization for the last split\n    3. Target column statistics card\n\n    Args:\n        statistics_artifact: Input artifact containing the JSON statistics\n        train_dataset: Training dataset for additional visualizations\n        test_dataset: Test dataset for additional visualizations\n        output_visualization: Output artifact for the HTML report\n        time_column: Name of the timestamp column\n        target_column: Name of the target column (worked hours)\n    \"\"\"\n    import json\n    import pandas as pd\n    import numpy as np\n    import plotly.express as px\n    import plotly.graph_objects as go\n    from plotly.subplots import make_subplots\n    import logging\n    from datetime import datetime\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    # Read statistics\n    logger.info(\"Loading statistics from JSON\")\n    with open(statistics_artifact.path, 'r') as f:\n        stats = json.load(f)\n\n    # Read datasets\n    logger.info(\"Loading datasets\")\n\n    train_df = pd.read_csv(train_dataset.path)\n    train_df[time_column] = pd.to_datetime(train_df[time_column])\n\n    test_df = pd.read_csv(test_dataset.path)\n    test_df[time_column] = pd.to_datetime(test_df[time_column])\n\n    # Filter for split 4\n    train_split4 = train_df[train_df['split_index'] == 4]\n    test_split4 = test_df[test_df['split_index'] == 4]\n    split4_stats = stats['train_split_4']\n\n    figures = []\n\n    def create_categorical_distributions():\n        logger.info(\"Creating categorical distributions chart\")\n\n        fig = make_subplots(\n            rows=4, cols=2,\n            subplot_titles=attribute_columns,\n            vertical_spacing=0.12,\n            horizontal_spacing=0.1\n        )\n\n        for idx, col in enumerate(attribute_columns, 1):\n            row = ((idx-1) // 2) + 1\n            col_num = ((idx-1) % 2) + 1\n\n            col_stats = split4_stats['categorical_columns'][col]\n            values = list(col_stats['distribution_percentage'].values())\n            labels = list(col_stats['distribution_percentage'].keys())\n\n            fig.add_trace(\n                go.Bar(\n                    x=labels,\n                    y=values,\n                    name=col,\n                    text=[f'{v:.1f}%' for v in values],\n                    textposition='auto',\n                    showlegend=False\n                ),\n                row=row, col=col_num\n            )\n\n            fig.update_xaxes(tickangle=45, row=row, col=col_num)\n            fig.update_yaxes(title='Percentage (%)', row=row, col=col_num)\n\n        fig.update_layout(\n            height=1200,\n            title_text=\"Categorical Variables Distribution (Train Split 4)\",\n            showlegend=False\n        )\n        return fig\n\n    def create_target_stats_card():\n        logger.info(\"Creating target statistics card\")\n        target_stats = split4_stats['target_column']\n\n        # Create subplot with 1 row and 2 columns\n        fig = make_subplots(\n            rows=1, cols=2,\n            column_widths=[0.5, 0.5],\n            specs=[[{\"type\": \"table\"}, {\"type\": \"violin\"}]],\n            horizontal_spacing=0.05\n        )\n\n        # Add table\n        fig.add_trace(\n            go.Table(\n                header=dict(\n                    values=['Metric', 'Value'],\n                    fill_color='lightgrey',\n                    align='left',\n                    font=dict(size=14)\n                ),\n                cells=dict(\n                    values=[\n                        ['Mean', 'Standard Deviation', 'Minimum', 'Maximum'],\n                        [\n                            f\"{target_stats['mean']:,.2f}\",\n                            f\"{target_stats['std']:,.2f}\",\n                            f\"{target_stats['min']:,.2f}\",\n                            f\"{target_stats['max']:,.2f}\",\n                        ]\n                    ],\n                    align='left',\n                    font=dict(size=13)\n                )\n            ),\n            row=1, col=1\n        )\n\n        # Compute log(SWT + 1)\n        log_swt = np.log1p(train_split4[target_column])\n\n        # Add violin plot (density plot) with log(SWT)\n        fig.add_trace(\n            go.Violin(\n                y=log_swt,\n                name=f\"log({target_column} + 1)\",\n                box_visible=False,\n                meanline_visible=True,\n                points=False,\n                fillcolor='lightblue',\n                line_color='blue',\n                showlegend=False,\n                hovertemplate=\"log(%{y:.2f})<extra></extra>\"\n            ),\n            row=1, col=2\n        )\n\n        # Update layout\n        fig.update_layout(\n            title=f\"Target Column Statistics - log({target_column} + 1) (Train Split 4)\",\n            height=400,\n            showlegend=False,\n            yaxis=dict(\n                title=f\"log({target_column} + 1)\",\n                tickformat=\".2f\",\n                side='right'\n            )\n        )\n\n        return fig\n\n\n\n    # Generate figures\n    figures.extend([\n        create_target_stats_card(),\n        create_categorical_distributions()\n    ])\n\n    # Create HTML content\n    html_parts = [\n        \"<!DOCTYPE html>\",\n        \"<html>\",\n        \"<head>\",\n        \"<title>Workforce Time Series Analysis Report - Split 4</title>\",\n        \"<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>\",\n        \"<style>\",\n        \"body { margin: 20px; }\",\n        \".header { text-align: center; margin-bottom: 30px; }\",\n        \".plot { margin-bottom: 40px; }\",\n        \".stats-summary { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }\",\n        \"</style>\",\n        \"</head>\",\n        \"<body>\",\n        \"<div class='header'>\",\n        \"<h1>Workforce Time Series Analysis Report - Split 4</h1>\",\n        f\"<p>Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>\",\n        \"</div>\",\n        \"<div class='stats-summary'>\",\n        \"<h2>Dataset Overview</h2>\",\n        f\"<p>Total Records: {split4_stats['total_rows']:,}</p>\",\n        f\"<p>Date Range: {split4_stats['date_range']['start']} to {split4_stats['date_range']['end']}</p>\",\n        \"</div>\"\n    ]\n\n    # Add figures\n    for fig in figures:\n        html_parts.append(f\"<div class='plot'>{fig.to_html(full_html=False, include_plotlyjs=False)}</div>\")\n\n    # Close HTML\n    html_parts.extend([\n        \"</body>\",\n        \"</html>\"\n    ])\n\n    # Save HTML report\n    logger.info(f\"Saving HTML report to {output_visualization.path}\")\n    with open(output_visualization.path, \"w\") as f:\n        f.write(\"\\n\".join(html_parts))\n\n    logger.info(\"Visualization generation completed\")\n\n"
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_statistics_visualization(\n    statistics_artifact: Input[Artifact],\n    train_dataset: Input[Artifact],\n    test_dataset: Input[Artifact],\n    attribute_columns: List[str],\n    time_column: str,\n    target_column: str,\n    output_visualization: Output[Artifact]\n):\n    \"\"\"\n    Generates an interactive HTML report visualizing the statistics from the dataset analysis.\n    Focuses on train split 4 (which contains all historical data) and creates specific visualizations:\n    1. Categorical variables distribution\n    2. Time series visualization for the last split\n    3. Target column statistics card\n    4. Weekly time series comparison between train and test data for split 4\n\n    Args:\n        statistics_artifact: Input artifact containing the JSON statistics\n        train_dataset: Training dataset for additional visualizations\n        test_dataset: Test dataset for additional visualizations\n        output_visualization: Output artifact for the HTML report\n        time_column: Name of the timestamp column\n        target_column: Name of the target column (worked hours)\n    \"\"\"\n    import json\n    import pandas as pd\n    import numpy as np\n    import plotly.express as px\n    import plotly.graph_objects as go\n    from plotly.subplots import make_subplots\n    import logging\n    from datetime import datetime, timedelta\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    logger.info(\"Loading statistics from JSON\")\n    with open(statistics_artifact.path, 'r') as f:\n        stats = json.load(f)\n\n    logger.info(\"Loading datasets\")\n    train_df = pd.read_csv(train_dataset.path)\n    train_df[time_column] = pd.to_datetime(train_df[time_column])\n\n    test_df = pd.read_csv(test_dataset.path)\n    test_df[time_column] = pd.to_datetime(test_df[time_column])\n\n    train_split4 = train_df[train_df['split_index'] == 4]\n    test_split4 = test_df[test_df['split_index'] == 4]\n    split4_stats = stats['train_split_4']\n\n    figures = []\n\n    def create_categorical_distributions():\n        logger.info(\"Creating categorical distributions chart\")\n\n        fig = make_subplots(\n            rows=4, cols=2,\n            subplot_titles=attribute_columns,\n            vertical_spacing=0.12,\n            horizontal_spacing=0.1\n        )\n\n        for idx, col in enumerate(attribute_columns, 1):\n            row = ((idx-1) // 2) + 1\n            col_num = ((idx-1) % 2) + 1\n\n            col_stats = split4_stats['categorical_columns'][col]\n            values = list(col_stats['distribution_percentage'].values())\n            labels = list(col_stats['distribution_percentage'].keys())\n\n            fig.add_trace(\n                go.Bar(\n                    x=labels,\n                    y=values,\n                    name=col,\n                    text=[f'{v:.1f}%' for v in values],\n                    textposition='auto',\n                    showlegend=False\n                ),\n                row=row, col=col_num\n            )\n\n            fig.update_xaxes(tickangle=45, row=row, col=col_num)\n            fig.update_yaxes(title='Percentage (%)', row=row, col=col_num)\n\n        fig.update_layout(\n            height=1200,\n            title_text=\"Categorical Variables Distribution (Train Split 4)\",\n            showlegend=False\n        )\n        return fig\n\n    def create_target_stats_card():\n        logger.info(\"Creating target statistics card\")\n        target_stats = split4_stats['target_column']\n\n        fig = make_subplots(\n            rows=1, cols=2,\n            column_widths=[0.5, 0.5],\n            specs=[[{\"type\": \"table\"}, {\"type\": \"violin\"}]],\n            horizontal_spacing=0.05\n        )\n\n        fig.add_trace(\n            go.Table(\n                header=dict(\n                    values=['Metric', 'Value'],\n                    fill_color='lightgrey',\n                    align='left',\n                    font=dict(size=14)\n                ),\n                cells=dict(\n                    values=[\n                        ['Mean', 'Standard Deviation', 'Minimum', 'Maximum'],\n                        [\n                            f\"{target_stats['mean']:,.2f}\",\n                            f\"{target_stats['std']:,.2f}\",\n                            f\"{target_stats['min']:,.2f}\",\n                            f\"{target_stats['max']:,.2f}\",\n                        ]\n                    ],\n                    align='left',\n                    font=dict(size=13)\n                )\n            ),\n            row=1, col=1\n        )\n\n        log_swt = np.log1p(train_split4[target_column])\n\n        fig.add_trace(\n            go.Violin(\n                y=log_swt,\n                name=f\"log({target_column} + 1)\",\n                box_visible=False,\n                meanline_visible=True,\n                points=False,\n                fillcolor='lightblue',\n                line_color='blue',\n                showlegend=False,\n                hovertemplate=\"log(%{y:.2f})<extra></extra>\"\n            ),\n            row=1, col=2\n        )\n\n        fig.update_layout(\n            title=f\"Target Column Statistics - log({target_column} + 1) (Train Split 4)\",\n            height=400,\n            showlegend=False,\n            yaxis=dict(\n                title=f\"log({target_column} + 1)\",\n                tickformat=\".2f\",\n                side='right'\n            )\n        )\n\n        return fig\n\n    def create_weekly_timeseries_comparison():\n        logger.info(\"Creating weekly time series comparison\")\n\n\n        last_train_date = train_split4[time_column].max()\n        one_year_ago = last_train_date - timedelta(days=365)\n\n\n        train_last_year = train_split4[train_split4[time_column] >= one_year_ago].copy()\n\n\n        train_weekly = train_last_year.groupby(pd.Grouper(key=time_column, freq='W-MON'))[target_column].sum().reset_index()\n        test_weekly = test_split4.groupby(pd.Grouper(key=time_column, freq='W-MON'))[target_column].sum().reset_index()\n\n        fig = go.Figure()\n\n\n        fig.add_trace(\n            go.Scatter(\n                x=train_weekly[time_column],\n                y=train_weekly[target_column],\n                name='Training Data',\n                line=dict(color='blue', width=2),\n                mode='lines',\n                hovertemplate=\"Date: %{x}<br>Value: %{y:,.0f}<extra></extra>\"\n            )\n        )\n\n\n        fig.add_trace(\n            go.Scatter(\n                x=test_weekly[time_column],\n                y=test_weekly[target_column],\n                name='Test Data',\n                line=dict(color='red', width=2),\n                mode='lines',\n                hovertemplate=\"Date: %{x}<br>Value: %{y:,.0f}<extra></extra>\"\n            )\n        )\n\n        fig.update_layout(\n            title=\"Weekly Time Series Comparison (Split 4)\",\n            xaxis_title=\"Date\",\n            yaxis_title=target_column,\n            height=500,\n            showlegend=True,\n            legend=dict(\n                yanchor=\"top\",\n                y=0.99,\n                xanchor=\"left\",\n                x=0.01\n            ),\n            hovermode='x unified'\n        )\n\n        return fig\n\n    figures.extend([\n        create_target_stats_card(),\n        create_weekly_timeseries_comparison(),\n        create_categorical_distributions()\n    ])\n\n    html_parts = [\n        \"<!DOCTYPE html>\",\n        \"<html>\",\n        \"<head>\",\n        \"<title>Workforce Time Series Analysis Report - Split 4</title>\",\n        \"<script src='https://cdn.plot.ly/plotly-latest.min.js'></script>\",\n        \"<style>\",\n        \"body { margin: 20px; }\",\n        \".header { text-align: center; margin-bottom: 30px; }\",\n        \".plot { margin-bottom: 40px; }\",\n        \".stats-summary { background: #f5f5f5; padding: 20px; border-radius: 5px; margin-bottom: 20px; }\",\n        \"</style>\",\n        \"</head>\",\n        \"<body>\",\n        \"<div class='header'>\",\n        \"<h1>Workforce Time Series Analysis Report - Split 4</h1>\",\n        f\"<p>Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>\",\n        \"</div>\",\n        \"<div class='stats-summary'>\",\n        \"<h2>Dataset Overview</h2>\",\n        f\"<p>Total Records: {split4_stats['total_rows']:,}</p>\",\n        f\"<p>Date Range: {split4_stats['date_range']['start']} to {split4_stats['date_range']['end']}</p>\",\n        \"</div>\"\n    ]\n\n    for fig in figures:\n        html_parts.append(f\"<div class='plot'>{fig.to_html(full_html=False, include_plotlyjs=False)}</div>\")\n\n    html_parts.extend([\n        \"</body>\",\n        \"</html>\"\n    ])\n\n    logger.info(f\"Saving HTML report to {output_visualization.path}\")\n    with open(output_visualization.path, \"w\") as f:\n        f.write(\"\\n\".join(html_parts))\n\n    logger.info(\"Visualization generation completed\")\n\n"
           ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/kfp-plot-slim:2.0.0"
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
         }
       },
       "exec-generate-time-series-cv": {
@@ -338,13 +553,56 @@
           "command": [
             "sh",
             "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
             "sh",
             "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_time_series_cv(\n    input_dataset: Input[Dataset],\n    time_column: str,\n    output_train: Output[Dataset],\n    output_test: Output[Dataset]\n):\n    \"\"\"\n    Splits preprocessed time series data into rolling forecast datasets for training and evaluation.\n\n    This component implements a rolling window cross-validation strategy for time series forecasting.\n    It reads a CSV dataset containing timestamp-based data and creates training and test sets with\n    an additional 'split_index' column to identify different temporal splits. Each split represents\n    a different forecasting period, with training data incrementally growing and test data moving\n    forward in time.\n\n    Split Structure:\n        - All splits start training from 2022-01-01\n        - Training periods grow progressively longer\n        - Each test period is a 3-month window following its training period\n        - Data is labeled with split_index (1-4) to identify which split it belongs to\n\n    Split Periods:\n        Split 1: Train (2022-01-01 to 2024-03-31), Test (2024-04-01 to 2024-06-30)\n        Split 2: Train (2022-01-01 to 2024-06-30), Test (2024-07-01 to 2024-09-30)\n        Split 3: Train (2022-01-01 to 2024-09-30), Test (2024-10-01 to 2024-12-31)\n        Split 4: Train (2022-01-01 to 2024-12-31), Test (2025-01-01 to 2025-03-31)\n\n    Args:\n        input_dataset: Input[Dataset]\n            The preprocessed CSV dataset containing time series data\n        time_column: str\n            Name of the column containing timestamps\n        output_train: Output[Dataset]\n            Output path for the combined training dataset\n            Contains all training data with a 'split_index' column\n        output_test: Output[Dataset]\n            Output path for the combined test dataset\n            Contains all test data with a 'split_index' column\n\n    Output Dataset Structure:\n        Both training and test datasets include all original columns plus:\n        - split_index: int (1-4)\n            Identifies which temporal split the row belongs to\n            Allows filtering/grouping data by split for analysis or modeling\n\n    Note:\n        This implementation combines all splits into two files (train and test) with a\n        split_index column, rather than creating separate files for each split. This\n        approach simplifies data handling while maintaining the ability to analyze\n        individual splits through the split_index column.\n    \"\"\"\n\n    import pandas as pd\n    import logging\n    from datetime import datetime\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    logger.info(f\"Reading input dataset from: {input_dataset.path}\")\n    forecast_processed_data = pd.read_csv(input_dataset.path, parse_dates=[time_column])\n\n    splits = [\n        {\n            \"split_index\": 1,\n            \"train_start\": \"2022-01-01\",\n            \"train_end\":   \"2024-03-31\",\n            \"test_start\":  \"2024-04-01\",\n            \"test_end\":    \"2024-06-30\"\n        },\n        {\n            \"split_index\": 2,\n            \"train_start\": \"2022-01-01\",\n            \"train_end\":   \"2024-06-30\",\n            \"test_start\":  \"2024-07-01\",\n            \"test_end\":    \"2024-09-30\"\n        },\n        {\n            \"split_index\": 3,\n            \"train_start\": \"2022-01-01\",\n            \"train_end\":   \"2024-09-30\",\n            \"test_start\":  \"2024-10-01\",\n            \"test_end\":    \"2024-12-31\"\n        },\n        {\n            \"split_index\": 4,\n            \"train_start\": \"2022-01-01\",\n            \"train_end\":   \"2024-12-31\",\n            \"test_start\":  \"2025-01-01\",\n            \"test_end\":    \"2025-03-31\"\n        },\n    ]\n\n    for s in splits:\n        for key in ['train_start', 'train_end', 'test_start', 'test_end']:\n            s[key] = pd.to_datetime(s[key])\n\n    all_train_data = []\n    all_test_data = []\n\n    for s in splits:\n        logger.info(f\"Processing split {s['split_index']}\")\n\n        train_mask = (forecast_processed_data[time_column] >= s[\"train_start\"]) & \\\n                     (forecast_processed_data[time_column] <= s[\"train_end\"])\n\n        test_mask = (forecast_processed_data[time_column] >= s[\"test_start\"]) & \\\n                    (forecast_processed_data[time_column] <= s[\"test_end\"])\n\n        train_df = forecast_processed_data.loc[train_mask].copy()\n        test_df = forecast_processed_data.loc[test_mask].copy()\n\n        train_df['split_index'] = s['split_index']\n        test_df['split_index'] = s['split_index']\n\n        all_train_data.append(train_df)\n        all_test_data.append(test_df)\n\n        logger.info(f\"Split {s['split_index']} - Train shape: {train_df.shape}, Test shape: {test_df.shape}\")\n\n    combined_train = pd.concat(all_train_data, ignore_index=True)\n    combined_test = pd.concat(all_test_data, ignore_index=True)\n\n    logger.info(f\"Saving combined training data (shape: {combined_train.shape}) to {output_train.path}\")\n    combined_train.to_csv(output_train.path, index=False)\n\n    logger.info(f\"Saving combined test data (shape: {combined_test.shape}) to {output_test.path}\")\n    combined_test.to_csv(output_test.path, index=False)\n\n"
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef generate_time_series_cv(\n    input_dataset: Input[Dataset],\n    time_column: str,\n    forecast_horizon: int,\n    output_train: Output[Dataset],\n    output_test: Output[Dataset]\n):\n    import pandas as pd\n    import logging\n    from datetime import timedelta\n    \"\"\"\n    Splits preprocessed time series data into rolling forecast datasets for training and evaluation.\n\n    This component implements a rolling window cross-validation strategy for time series forecasting.\n    It reads a CSV dataset containing timestamp-based data and creates training and test sets with\n    an additional 'split_index' column to identify different temporal splits. Each split represents\n    a different forecasting period, with training data incrementally growing and test data moving\n    forward in time.\n\n    Split Structure:\n        - All splits start training from 2022-01-01\n        - Training periods grow progressively longer\n        - Each test period is forecast_horizon days following its training period\n        - Data is labeled with split_index (1-4) to identify which split it belongs to\n\n    Args:\n        input_dataset: Input[Dataset]\n            The preprocessed CSV dataset containing time series data\n        time_column: str\n            Name of the column containing timestamps\n        forecast_horizon: int\n            Number of days for each test period\n        output_train: Output[Dataset]\n            Output path for the combined training dataset\n            Contains all training data with a 'split_index' column\n        output_test: Output[Dataset]\n            Output path for the combined test dataset\n            Contains all test data with a 'split_index' column\n\n    Output Dataset Structure:\n        Both training and test datasets include all original columns plus:\n        - split_index: int (1-4)\n            Identifies which temporal split the row belongs to\n            Allows filtering/grouping data by split for analysis or modeling\n    \"\"\"\n\n    logging.basicConfig(level=logging.INFO)\n    logger = logging.getLogger(__name__)\n\n    logger.info(f\"Reading input dataset from: {input_dataset.path}\")\n    forecast_processed_data = pd.read_csv(input_dataset.path, parse_dates=[time_column])\n\n    train_start = pd.to_datetime(\"2022-01-01\")\n\n    splits = []\n    current_train_end = pd.to_datetime(\"2024-03-31\")\n\n    for split_index in range(1, 5):\n        test_start = current_train_end + timedelta(days=1)\n        test_end = test_start + timedelta(days=forecast_horizon-1)\n\n        splits.append({\n            \"split_index\": split_index,\n            \"train_start\": train_start,\n            \"train_end\": current_train_end,\n            \"test_start\": test_start,\n            \"test_end\": test_end\n        })\n\n        current_train_end = test_end\n\n    logger.info(\"Generated splits:\")\n    for s in splits:\n        logger.info(f\"Split {s['split_index']}:\")\n        logger.info(f\"  Train: {s['train_start'].strftime('%Y-%m-%d')} to {s['train_end'].strftime('%Y-%m-%d')}\")\n        logger.info(f\"  Test:  {s['test_start'].strftime('%Y-%m-%d')} to {s['test_end'].strftime('%Y-%m-%d')}\")\n\n    all_train_data = []\n    all_test_data = []\n\n    for s in splits:\n        logger.info(f\"\\nProcessing split {s['split_index']}\")\n\n        train_mask = (forecast_processed_data[time_column] >= s[\"train_start\"]) & \\\n                     (forecast_processed_data[time_column] <= s[\"train_end\"])\n\n        test_mask = (forecast_processed_data[time_column] >= s[\"test_start\"]) & \\\n                    (forecast_processed_data[time_column] <= s[\"test_end\"])\n\n        train_df = forecast_processed_data.loc[train_mask].copy()\n        test_df = forecast_processed_data.loc[test_mask].copy()\n\n        train_df['split_index'] = s['split_index']\n        test_df['split_index'] = s['split_index']\n\n        all_train_data.append(train_df)\n        all_test_data.append(test_df)\n\n        logger.info(f\"Split {s['split_index']} - Train shape: {train_df.shape}, Test shape: {test_df.shape}\")\n\n    combined_train = pd.concat(all_train_data, ignore_index=True)\n    combined_test = pd.concat(all_test_data, ignore_index=True)\n\n    logger.info(f\"\\nSaving combined training data (shape: {combined_train.shape}) to {output_train.path}\")\n    combined_train.to_csv(output_train.path, index=False)\n\n    logger.info(f\"Saving combined test data (shape: {combined_test.shape}) to {output_test.path}\")\n    combined_test.to_csv(output_test.path, index=False)\n\n    for split_index in range(1, 5):\n        train_count = len(combined_train[combined_train['split_index'] == split_index])\n        test_count = len(combined_test[combined_test['split_index'] == split_index])\n        logger.info(f\"\\nSplit {split_index} summary:\")\n        logger.info(f\"  Training samples: {train_count}\")\n        logger.info(f\"  Test samples: {test_count}\")\n\n"
           ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/mlops/kfp-2.0.0/kfp-load-model-slim:1.0.0"
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
+        }
+      },
+      "exec-log-reports": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "log_reports"
+          ],
+          "command": [
+            "sh",
+            "-c",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
+            "sh",
+            "-ec",
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef log_reports(\n    data_report: Input[Artifact],\n    eval_report: Input[Artifact],\n    experiment_run: Input[Artifact]\n):\n    from google.cloud import aiplatform\n    import logging\n    import json\n\n    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')\n    logger = logging.getLogger(__name__)\n\n    with open(experiment_run.path, 'r') as f:\n        run_info = json.load(f)\n\n    logger.info(f\"Initializing Vertex AI SDK and continuing experiment run\")\n    aiplatform.init(project=run_info['project_id'], location=run_info['location'], experiment=run_info['experiment'])\n    run = aiplatform.start_run(run_info['run_name'], resume=True)\n\n    run.log_params({\n        'dataset_report_uri': data_report.path,\n        'model_eval_uri': eval_report.path\n    })\n\n    run.end_run()\n\n"
+          ],
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
+        }
+      },
+      "exec-model-evaluator-component": {
+        "container": {
+          "args": [
+            "--executor_input",
+            "{{$}}",
+            "--function_to_execute",
+            "model_evaluator_component"
+          ],
+          "command": [
+            "sh",
+            "-c",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
+            "sh",
+            "-ec",
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef model_evaluator_component(\n    test_dataset: Input[Dataset],\n    trained_model: Input[Model],\n    experiment_run: Input[Artifact],\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    output_metrics: Output[Artifact]\n):\n    import pickle\n    from google.cloud import aiplatform\n    import pandas as pd\n    import numpy as np\n    import logging\n    from sklearn.metrics import mean_absolute_error, mean_squared_error\n    import json\n\n    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')\n    logger = logging.getLogger(__name__)\n\n    def get_tier(series_id):\n        if \"Tier 1\" in series_id:\n            return \"Tier 1\"\n        elif \"Tier 2\" in series_id:\n            return \"Tier 2\"\n        elif \"Tier 3\" in series_id:\n            return \"Tier 3\"\n        return \"Unknown\"\n\n    def calculate_metrics(y_true, y_pred):\n        mae = mean_absolute_error(y_true, y_pred)\n        wape = np.sum(np.abs(y_true - y_pred)) / (np.sum(np.abs(y_true)) + 1e-8)\n        rmse = np.sqrt(mean_squared_error(y_true, y_pred))\n        bias = np.mean(y_pred - y_true)\n\n        return {\n            'MAE': mae,\n            'WAPE': wape,\n            'RMSE': rmse,\n            'Bias': bias\n        }\n\n    logger.info(\"Starting model evaluator component\")\n\n    with open(experiment_run.path, 'r') as f:\n        run_info = json.load(f)\n\n    logger.info(f\"Initializing Vertex AI SDK and continuing experiment run\")\n    aiplatform.init(project=run_info['project_id'], location=run_info['location'], experiment=run_info['experiment'])\n    run = aiplatform.start_run(run_info['run_name'], resume=True)\n\n    logger.info(f\"Reading test dataset from: {test_dataset.path}\")\n    test_df = pd.read_csv(test_dataset.path)\n    test_df[time_column] = pd.to_datetime(test_df[time_column])\n\n    logger.info(f\"Loading model predictions from: {trained_model.path}\")\n    with open(trained_model.path, \"rb\") as f:\n        model_output = pickle.load(f)\n\n    tier_predictions = {\n        \"Tier 1\": {\"true\": [], \"pred\": []},\n        \"Tier 2\": {\"true\": [], \"pred\": []},\n        \"Tier 3\": {\"true\": [], \"pred\": []},\n        \"Overall\": {\"true\": [], \"pred\": []}\n    }\n\n    logger.info(f\"Evaluating model type: {model_output['model_type']}\")\n\n    for (series_id, split), predictions in model_output['predictions'].items():\n        tier = get_tier(series_id)\n\n        series_test = test_df[(test_df[series_identifier] == series_id) & \n                              (test_df['split_index'] == split)].sort_values(time_column)\n\n        if len(series_test) == 0:\n            logger.warning(f\"No test data for series {series_id}, split {split}\")\n            continue\n\n        pred_dates = pd.to_datetime(predictions['timestamps'])\n        y_true = series_test[series_test[time_column].isin(pred_dates)][target_column].values\n        y_pred = np.array(predictions['values'])[:len(y_true)]\n\n        if len(y_true) == 0 or len(y_pred) == 0:\n            logger.warning(f\"No matching data for series {series_id}, split {split}\")\n            continue\n\n        logger.info(f\"Series {series_id}, Split {split}: True shape: {y_true.shape}, Pred shape: {y_pred.shape}\")\n\n        if tier in tier_predictions:\n            tier_predictions[tier][\"true\"].extend(y_true)\n            tier_predictions[tier][\"pred\"].extend(y_pred)\n        tier_predictions[\"Overall\"][\"true\"].extend(y_true)\n        tier_predictions[\"Overall\"][\"pred\"].extend(y_pred)\n\n    all_metrics = {}\n\n    for tier, values in tier_predictions.items():\n        if not len(values['true']):\n            logger.warning(f\"No data for {tier}\")\n            continue\n\n        y_true = np.array(values[\"true\"])\n        y_pred = np.array(values[\"pred\"])\n\n        logger.info(f\"{tier} - True shape: {y_true.shape}, Pred shape: {y_pred.shape}\")\n\n        metrics = calculate_metrics(y_true, y_pred)\n\n        prefix = \"Overall_\" if tier == \"Overall\" else f\"{tier}_\"\n        all_metrics.update({\n            f\"{prefix}{metric_name}\": value \n            for metric_name, value in metrics.items()\n        })\n\n        logger.info(f\"\\n{tier} Metrics:\")\n        for metric_name, value in metrics.items():\n            logger.info(f\"{metric_name}: {value:.4f}\")\n\n    # Log metrics and parameters dynamically based on model output\n    run.log_metrics(all_metrics)\n\n    # Log model parameters dynamically\n    model_params = {\n        \"model_type\": model_output['model_type'],\n        \"time_column\": time_column,\n        \"target_column\": target_column,\n        \"series_identifier\": series_identifier\n    }\n\n    # Add any model-specific parameters from the model output\n    if 'parameters' in model_output:\n        if isinstance(model_output['parameters'], dict):\n            # For models with global parameters (like SMA)\n            model_params.update(model_output['parameters'])\n        else:\n            # For models with per-series parameters (like SARIMA)\n            # Log the parameters of the first series as an example\n            first_series_params = next(iter(model_output['parameters'].values()))\n            model_params.update({\n                f\"example_series_params_{k}\": str(v) \n                for k, v in first_series_params.items()\n            })\n\n    run.log_params(model_params)\n\n    logger.info(\"Model evaluator component completed successfully\")\n\n    with open(output_metrics.path, 'w') as f:\n        json.dump(all_metrics, f)\n\n"
+          ],
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc",
+          "resources": {
+            "resourceCpuLimit": "16"
+          }
         }
       },
       "exec-query-and-preprocess": {
@@ -358,53 +616,36 @@
           "command": [
             "sh",
             "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
+            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet --no-warn-script-location 'kfp==2.10.1' '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"$0\" \"$@\"\n",
             "sh",
             "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef query_and_preprocess(\n    project_id: str,\n    project_location: str,\n    bq_dataset: str,\n    bq_source_table: str,\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    attribute_columns: List[str],\n    output_dataset: Output[Dataset]\n):\n    \"\"\" \n    Queries BigQuery data, performs preprocessing, and exports to a CSV dataset for training.\n    The function aggregates data by time and attributes, creates a unique series identifier,\n    and handles categorical features appropriately.\n\n    Args:\n        project_id: GCP project ID\n        project_location: GCP project location/region\n        bq_dataset: BigQuery dataset name\n        bq_source_table: Source table name\n        attribute_columns: List of categorical columns to group by\n        output_dataset: Output path for the preprocessed CSV dataset\n\n    Returns:\n        Writes a preprocessed CSV file to the output_dataset path containing:\n        - Series_Identifier: Concatenated string of attribute values\n        - Appointment_Day: Timestamp column\n        - Attribute columns: Original categorical features\n        - SWT: Aggregated target variable\n    \"\"\"\n\n    import datetime\n    import pandas as pd\n    from google.cloud import bigquery\n\n\n    def create_series_identifier(columns, series_identifier):\n        coalesce_parts = [f\"COALESCE({column}, 'None')\" for column in columns]\n        separator = \"' '\"\n        return f\"CONCAT({f', {separator}, '.join(coalesce_parts)}) AS {series_identifier}\"\n\n    time_column = \"Appointment_Day\"\n    target_column = \"SWT\"\n\n    ATTRIBUTE_STRING = ','.join(attribute_columns)\n\n    COLUMN_SPECS = {\n        time_column:             \"timestamp\",\n        target_column:           \"numeric\"\n    }\n\n    for category in attribute_columns:\n        COLUMN_SPECS[category] = \"categorical\"\n\n    experiment_train_data_query = f\"\"\"\n    WITH historical_table AS (\n        SELECT \n            {time_column},\n            {ATTRIBUTE_STRING},\n            SUM({target_column}) AS {target_column}\n        FROM `{project_id}.{bq_dataset}.{bq_source_table}`\n        WHERE {time_column} <= DATE('2025-03-31')\n        GROUP BY {time_column},{ATTRIBUTE_STRING}\n    )\n    SELECT \n        {create_series_identifier(attribute_columns, series_identifier)},\n        {time_column},\n        {ATTRIBUTE_STRING},\n        {target_column}\n    FROM historical_table\n    \"\"\"\n\n    client = bigquery.Client(\n        project=project_id,\n        location=project_location)\n\n    processed_data = client.query(experiment_train_data_query).to_dataframe()\n\n    processed_data.to_csv(output_dataset.path, index=False)\n    print(f\"CSV file written to {output_dataset.path}\")\n\n"
+            "program_path=$(mktemp -d)\n\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\n_KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
+            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef query_and_preprocess(\n    project_id: str,\n    project_location: str,\n    bq_dataset: str,\n    bq_source_table: str,\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    attribute_columns: List[str],\n    output_dataset: Output[Dataset]\n):\n    \"\"\" \n    Queries BigQuery data, performs preprocessing, and exports to a CSV dataset for training.\n    The function aggregates data by time and attributes, creates a unique series identifier,\n    and handles categorical features appropriately.\n\n    Args:\n        project_id: GCP project ID\n        project_location: GCP project location/region\n        bq_dataset: BigQuery dataset name\n        bq_source_table: Source table name\n        attribute_columns: List of categorical columns to group by\n        output_dataset: Output path for the preprocessed CSV dataset\n\n    Returns:\n        Writes a preprocessed CSV file to the output_dataset path containing:\n        - Series_Identifier: Concatenated string of attribute values\n        - Appointment_Day: Timestamp column\n        - Attribute columns: Original categorical features\n        - SWT: Aggregated target variable\n    \"\"\"\n\n    from google.cloud import bigquery\n\n\n    def create_series_identifier(columns, series_identifier):\n        coalesce_parts = [f\"COALESCE({column}, 'None')\" for column in columns]\n        separator = \"' '\"\n        return f\"CONCAT({f', {separator}, '.join(coalesce_parts)}) AS {series_identifier}\"\n\n    ATTRIBUTE_STRING = ','.join(attribute_columns)\n\n    experiment_train_data_query = f\"\"\"\n    WITH historical_table AS (\n        SELECT \n            {time_column},\n            {ATTRIBUTE_STRING},\n            SUM({target_column}) AS {target_column}\n        FROM `{project_id}.{bq_dataset}.{bq_source_table}`\n        WHERE {time_column} <= DATE('2025-03-31')\n        GROUP BY {time_column},{ATTRIBUTE_STRING}\n    )\n    SELECT \n        {create_series_identifier(attribute_columns, series_identifier)},\n        {time_column},\n        {ATTRIBUTE_STRING},\n        {target_column}\n    FROM historical_table\n    \"\"\"\n\n    client = bigquery.Client(\n        project=project_id,\n        location=project_location)\n\n    processed_data = client.query(experiment_train_data_query).to_dataframe()\n\n    processed_data.to_csv(output_dataset.path, index=False)\n    print(f\"CSV file written to {output_dataset.path}\")\n\n"
           ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/kfp-preprocess-slim:2.0.1"
-        }
-      },
-      "exec-sma-evaluator-component": {
-        "container": {
-          "args": [
-            "--executor_input",
-            "{{$}}",
-            "--function_to_execute",
-            "sma_evaluator_component"
-          ],
-          "command": [
-            "sh",
-            "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
-            "sh",
-            "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef sma_evaluator_component(\n    test_dataset: Input[Dataset],\n    trained_model: Input[Model],\n    experiment_run: Input[Artifact],\n    window_size: int,\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    metrics: Output[Artifact]\n):\n    import pickle\n    from google.cloud import aiplatform\n    import pandas as pd\n    import numpy as np\n    import logging\n    from sklearn.metrics import mean_absolute_error, mean_squared_error\n    import json\n    import re\n\n    # Configure logging\n    logging.basicConfig(\n        level=logging.INFO,\n        format='%(asctime)s - %(levelname)s - %(message)s'\n    )\n    logger = logging.getLogger(__name__)\n\n    def get_tier(series_id):\n        \"\"\"Extract tier from series identifier\"\"\"\n        if \"Tier 1\" in series_id:\n            return \"Tier 1\"\n        elif \"Tier 2\" in series_id:\n            return \"Tier 2\"\n        elif \"Tier 3\" in series_id:\n            return \"Tier 3\"\n        return \"Unknown\"\n\n    def calculate_metrics(y_true, y_pred):\n        \"\"\"Calculate all metrics for a given set of true and predicted values\"\"\"\n        mae = mean_absolute_error(y_true, y_pred)\n        wape = np.sum(np.abs(y_true - y_pred)) / (np.sum(y_true) +1)\n        rmse = np.sqrt(mean_squared_error(y_true, y_pred))\n        bias = np.mean(y_pred - y_true)\n\n        return {\n            'MAE': mae,\n            'WAPE': wape,\n            'RMSE': rmse,\n            'Bias': bias\n        }\n\n    logger.info(\"Starting SMA evaluator component\")\n\n    # Load experiment run information\n    with open(experiment_run.path, 'r') as f:\n        run_info = json.load(f)\n\n    # Initialize Vertex AI SDK and continue the experiment run\n    logger.info(f\"Initializing Vertex AI SDK and continuing experiment run\")\n    aiplatform.init(project=run_info['project_id'], location=run_info['location'], experiment=run_info['experiment'])\n    run = run = aiplatform.start_run(run_info['run_name'], resume=True)\n\n    # Load test dataset and trained models\n    logger.info(f\"Reading test dataset from: {test_dataset.path}\")\n    test_df = pd.read_csv(test_dataset.path)\n\n    logger.info(f\"Loading trained models from: {trained_model.path}\")\n    with open(trained_model.path, \"rb\") as f:\n        models = pickle.load(f)\n\n    # Initialize dictionaries to store predictions and actual values by tier\n    tier_predictions = {\n        \"Tier 1\": {\"true\": [], \"pred\": []},\n        \"Tier 2\": {\"true\": [], \"pred\": []},\n        \"Tier 3\": {\"true\": [], \"pred\": []},\n        \"Overall\": {\"true\": [], \"pred\": []}\n    }\n\n    # Generate predictions and collect them by tier\n    for (series_id, split), model in models.items():\n        # Get the tier for this series\n        tier = get_tier(series_id)\n\n        # Filter test data for this series and split\n        series_test = test_df[(test_df[series_identifier] == series_id) & \n                             (test_df['split_index'] == split)].sort_values(time_column)\n\n        if len(series_test) == 0:\n            continue\n\n        # Generate predictions\n        y_true = series_test[target_column].values\n        y_pred = np.array(model + [model[-1]] * (len(y_true) - len(model)))\n\n        # Store predictions and actual values for both tier and overall\n        if tier in tier_predictions:\n            tier_predictions[tier][\"true\"].extend(y_true)\n            tier_predictions[tier][\"pred\"].extend(y_pred)\n        tier_predictions[\"Overall\"][\"true\"].extend(y_true)\n        tier_predictions[\"Overall\"][\"pred\"].extend(y_pred)\n\n    # Calculate and log metrics for each tier and overall\n    all_metrics = {}\n\n    for tier, values in tier_predictions.items():\n        if len(values[\"true\"]) > 0:  # Only calculate metrics if we have data for this tier\n            y_true = np.array(values[\"true\"])\n            y_pred = np.array(values[\"pred\"])\n\n            metrics = calculate_metrics(y_true, y_pred)\n\n            # Store metrics\n            prefix = \"Overall_\" if tier == \"Overall\" else f\"{tier}_\"\n            all_metrics.update({\n                f\"{prefix}{metric_name}\": value \n                for metric_name, value in metrics.items()\n            })\n\n            # Log summary for this tier\n            logger.info(f\"\\n{tier} Metrics:\")\n            for metric_name, value in metrics.items():\n                logger.info(f\"{metric_name}: {value:.4f}\")\n\n    # Log metrics to Vertex AI\n    run.log_metrics(all_metrics)\n\n    # Log parameters\n    run.log_params({\n        \"window_size\": window_size,\n        \"time_column\": time_column,\n        \"target_column\": target_column,\n        \"series_identifier\": series_identifier\n    })\n\n    logger.info(\"SMA evaluator component completed successfully\")\n\n    with open(metrics.path, 'w') as f:\n        json.dump(all_metrics, f)\n\n"
-          ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/components/kfp-2.0.0/kfp-pycaret-slim:1.1.3"
+          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/b2b_ai/wf_pipeline/training:1.0.2-rc"
         }
       },
       "exec-sma-trainer-component": {
         "container": {
           "args": [
-            "--executor_input",
-            "{{$}}",
-            "--function_to_execute",
-            "sma_trainer_component"
+            "--type",
+            "CustomJob",
+            "--payload",
+            "{\"display_name\": \"{{$.inputs.parameters['display_name']}}\", \"job_spec\": {\"worker_pool_specs\": {{$.inputs.parameters['worker_pool_specs']}}, \"scheduling\": {\"timeout\": \"{{$.inputs.parameters['timeout']}}\", \"restart_job_on_worker_restart\": {{$.inputs.parameters['restart_job_on_worker_restart']}}, \"strategy\": \"{{$.inputs.parameters['strategy']}}\", \"max_wait_duration\": \"{{$.inputs.parameters['max_wait_duration']}}\"}, \"service_account\": \"{{$.inputs.parameters['service_account']}}\", \"tensorboard\": \"{{$.inputs.parameters['tensorboard']}}\", \"enable_web_access\": {{$.inputs.parameters['enable_web_access']}}, \"network\": \"{{$.inputs.parameters['network']}}\", \"reserved_ip_ranges\": {{$.inputs.parameters['reserved_ip_ranges']}}, \"base_output_directory\": {\"output_uri_prefix\": \"{{$.inputs.parameters['base_output_directory']}}\"}, \"persistent_resource_id\": \"{{$.inputs.parameters['persistent_resource_id']}}\"}, \"labels\": {{$.inputs.parameters['labels']}}, \"encryption_spec\": {\"kms_key_name\": \"{{$.inputs.parameters['encryption_spec_key_name']}}\"}}",
+            "--project",
+            "{{$.inputs.parameters['project']}}",
+            "--location",
+            "{{$.inputs.parameters['location']}}",
+            "--gcp_resources",
+            "{{$.outputs.parameters['gcp_resources'].output_file}}"
           ],
           "command": [
-            "sh",
-            "-c",
-            "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip || python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1 python3 -m pip install --quiet     --no-warn-script-location 'kfp==2.0.0' && \"$0\" \"$@\"\n",
-            "sh",
-            "-ec",
-            "program_path=$(mktemp -d)\nprintf \"%s\" \"$0\" > \"$program_path/ephemeral_component.py\"\npython3 -m kfp.components.executor_main                         --component_module_path                         \"$program_path/ephemeral_component.py\"                         \"$@\"\n",
-            "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import *\n\ndef sma_trainer_component(\n    dataset: Input[Dataset],\n    experiment_name: str,\n    window_size: int,\n    project_id: str,\n    project_location: str,\n    time_column: str,\n    target_column: str,\n    series_identifier: str,\n    output_model: Output[Model],\n    experiment_run: Output[Artifact]\n):\n    import pickle\n    from google.cloud import aiplatform\n    import pandas as pd\n    from datetime import datetime\n    import json\n    import logging\n\n    # Configure logging\n    logging.basicConfig(\n        level=logging.INFO,\n        format='%(asctime)s - %(levelname)s - %(message)s'\n    )\n    logger = logging.getLogger(__name__)\n\n    # Custom tqdm class that logs to our logger\n    class TqdmToLogger(object):\n        def __init__(self, desc=None, total=None, logger=None):\n            self.logger = logger or logging.getLogger(__name__)\n            self.desc = desc\n            self.total = total\n            self.current = 0\n\n        def update(self, n=1):\n            self.current += n\n            if self.desc:\n                self.logger.info(f'{self.desc}: {self.current}/{self.total}')\n            else:\n                self.logger.info(f'Progress: {self.current}/{self.total}')\n\n    logger.info(f\"Starting SMA trainer component with window size: {window_size}\")\n\n    # Initialize Vertex AI SDK\n    logger.info(f\"Initializing Vertex AI SDK for project: {project_id}, location: {project_location}\")\n    aiplatform.init(project=project_id, location=project_location, experiment=experiment_name)\n\n    logger.info(f\"Reading dataset from: {dataset.path}\")\n    df = pd.read_csv(dataset.path)\n    logger.info(f\"Dataset shape: {df.shape}\")\n\n    models = {}\n    timestamp = datetime.now().strftime('%Y-%m-%d-%H%M')\n    run = aiplatform.start_run(\"sma-training-\" + timestamp)\n\n    unique_splits = sorted(df[\"split_index\"].unique())\n    total_combinations = sum(len(df[df[\"split_index\"] == split][series_identifier].unique()) \n                           for split in unique_splits)\n\n    logger.info(f\"Processing {total_combinations} series across {len(unique_splits)} splits\")\n\n    # Main progress tracking\n    overall_progress = TqdmToLogger(desc=\"Overall Progress\", total=total_combinations, logger=logger)\n\n    for split in unique_splits:\n        split_df = df[df[\"split_index\"] == split]\n        unique_series = split_df[series_identifier].unique()\n\n        logger.info(f\"Processing Split {split} ({len(unique_series)} series)\")\n\n        for series_id in unique_series:\n            series_df = split_df[split_df[series_identifier] == series_id].sort_values(time_column)\n            sma_series = series_df[target_column].rolling(window=window_size).mean()\n            models[(series_id, split)] = sma_series.dropna().tolist()\n            overall_progress.update(1)\n\n    logger.info(f\"Total models created: {len(models)}\")\n    logger.info(f\"Saving models to: {output_model.path}\")\n\n    with open(output_model.path, \"wb\") as f:\n        pickle.dump(models, f)\n\n    logger.info(\"Logging to Vertex AI\")\n    run.log_params({\"window_size\": window_size, \"model_uri\": output_model.path})\n    run.log_metrics({\"total_models\": len(models)})\n\n    # Save run information for the next step\n    run_info = {\n        \"run_name\": run.name,\n        \"experiment\": experiment_name,\n        \"project_id\": project_id,\n        \"location\": project_location\n    }\n    with open(experiment_run.path, 'w') as f:\n        json.dump(run_info, f)\n\n    logger.info(\"SMA trainer component completed successfully\")\n\n"
+            "python3",
+            "-u",
+            "-m",
+            "google_cloud_pipeline_components.container.v1.custom_job.launcher"
           ],
-          "image": "northamerica-northeast1-docker.pkg.dev/cio-workbench-image-np-0ddefe/bi-platform/bi-aaaie/images/components/kfp-2.0.0/kfp-pycaret-slim:1.1.3"
+          "image": "gcr.io/ml-pipeline/google-cloud-pipeline-components:2.19.0"
         }
       }
     }
@@ -455,6 +696,55 @@
           },
           "taskInfo": {
             "name": "generate-dataset-statistics"
+          }
+        },
+        "generate-model-report-card": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-generate-model-report-card"
+          },
+          "dependentTasks": [
+            "generate-dataset-statistics",
+            "model-evaluator-component",
+            "sma-trainer-component"
+          ],
+          "inputs": {
+            "artifacts": {
+              "evaluation_metrics": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_metrics",
+                  "producerTask": "model-evaluator-component"
+                }
+              },
+              "statistics_artifact": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_statistics",
+                  "producerTask": "generate-dataset-statistics"
+                }
+              },
+              "trained_model": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_model",
+                  "producerTask": "sma-trainer-component"
+                }
+              }
+            },
+            "parameters": {
+              "series_identifier": {
+                "componentInputParameter": "series_identifier"
+              },
+              "target_column": {
+                "componentInputParameter": "target_column"
+              },
+              "time_column": {
+                "componentInputParameter": "time_column"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "generate-model-report-card"
           }
         },
         "generate-statistics-visualization": {
@@ -525,6 +815,9 @@
               }
             },
             "parameters": {
+              "forecast_horizon": {
+                "componentInputParameter": "forecast_horizon"
+              },
               "time_column": {
                 "componentInputParameter": "time_column"
               }
@@ -532,6 +825,92 @@
           },
           "taskInfo": {
             "name": "generate-time-series-cv"
+          }
+        },
+        "log-reports": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-log-reports"
+          },
+          "dependentTasks": [
+            "generate-model-report-card",
+            "generate-statistics-visualization",
+            "sma-trainer-component"
+          ],
+          "inputs": {
+            "artifacts": {
+              "data_report": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_visualization",
+                  "producerTask": "generate-statistics-visualization"
+                }
+              },
+              "eval_report": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_report",
+                  "producerTask": "generate-model-report-card"
+                }
+              },
+              "experiment_run": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "experiment_run",
+                  "producerTask": "sma-trainer-component"
+                }
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "log-reports"
+          }
+        },
+        "model-evaluator-component": {
+          "cachingOptions": {
+            "enableCache": true
+          },
+          "componentRef": {
+            "name": "comp-model-evaluator-component"
+          },
+          "dependentTasks": [
+            "generate-time-series-cv",
+            "sma-trainer-component"
+          ],
+          "inputs": {
+            "artifacts": {
+              "experiment_run": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "experiment_run",
+                  "producerTask": "sma-trainer-component"
+                }
+              },
+              "test_dataset": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_test",
+                  "producerTask": "generate-time-series-cv"
+                }
+              },
+              "trained_model": {
+                "taskOutputArtifact": {
+                  "outputArtifactKey": "output_model",
+                  "producerTask": "sma-trainer-component"
+                }
+              }
+            },
+            "parameters": {
+              "series_identifier": {
+                "componentInputParameter": "series_identifier"
+              },
+              "target_column": {
+                "componentInputParameter": "target_column"
+              },
+              "time_column": {
+                "componentInputParameter": "time_column"
+              }
+            }
+          },
+          "taskInfo": {
+            "name": "model-evaluator-component"
           }
         },
         "query-and-preprocess": {
@@ -573,57 +952,6 @@
             "name": "query-and-preprocess"
           }
         },
-        "sma-evaluator-component": {
-          "cachingOptions": {
-            "enableCache": true
-          },
-          "componentRef": {
-            "name": "comp-sma-evaluator-component"
-          },
-          "dependentTasks": [
-            "generate-time-series-cv",
-            "sma-trainer-component"
-          ],
-          "inputs": {
-            "artifacts": {
-              "experiment_run": {
-                "taskOutputArtifact": {
-                  "outputArtifactKey": "experiment_run",
-                  "producerTask": "sma-trainer-component"
-                }
-              },
-              "test_dataset": {
-                "taskOutputArtifact": {
-                  "outputArtifactKey": "output_test",
-                  "producerTask": "generate-time-series-cv"
-                }
-              },
-              "trained_model": {
-                "taskOutputArtifact": {
-                  "outputArtifactKey": "output_model",
-                  "producerTask": "sma-trainer-component"
-                }
-              }
-            },
-            "parameters": {
-              "series_identifier": {
-                "componentInputParameter": "series_identifier"
-              },
-              "target_column": {
-                "componentInputParameter": "target_column"
-              },
-              "time_column": {
-                "componentInputParameter": "time_column"
-              },
-              "window_size": {
-                "componentInputParameter": "window_size"
-              }
-            }
-          },
-          "taskInfo": {
-            "name": "sma-evaluator-component"
-          }
-        },
         "sma-trainer-component": {
           "cachingOptions": {
             "enableCache": true
@@ -647,11 +975,23 @@
               "experiment_name": {
                 "componentInputParameter": "experiment_name"
               },
+              "forecast_horizon": {
+                "componentInputParameter": "forecast_horizon"
+              },
+              "location": {
+                "componentInputParameter": "project_location"
+              },
+              "project": {
+                "componentInputParameter": "project_id"
+              },
               "project_id": {
                 "componentInputParameter": "project_id"
               },
               "project_location": {
                 "componentInputParameter": "project_location"
+              },
+              "run_name": {
+                "componentInputParameter": "run_name"
               },
               "series_identifier": {
                 "componentInputParameter": "series_identifier"
@@ -687,10 +1027,16 @@
         "experiment_name": {
           "parameterType": "STRING"
         },
+        "forecast_horizon": {
+          "parameterType": "NUMBER_INTEGER"
+        },
         "project_id": {
           "parameterType": "STRING"
         },
         "project_location": {
+          "parameterType": "STRING"
+        },
+        "run_name": {
           "parameterType": "STRING"
         },
         "series_identifier": {
@@ -709,5 +1055,5 @@
     }
   },
   "schemaVersion": "2.1.0",
-  "sdkVersion": "kfp-2.0.0"
+  "sdkVersion": "kfp-2.10.1"
 }

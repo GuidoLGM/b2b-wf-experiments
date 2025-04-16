@@ -1,7 +1,5 @@
 ## Set-up
 
-TODO: add devcontainer setup
-
 Create a bucket using the following name pattern:
 
 ```

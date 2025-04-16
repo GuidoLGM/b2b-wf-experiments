@@ -31,3 +31,7 @@ cross_validation:
   root_dir: artifacts/cross_validation
   train_file_name: cv_processed_train.csv
   test_file_name: cv_processed_test.csv
+
+dataset_statistics:
+  root_dir: artifacts/dataset_statistics
+  output_file_name: data_stats.json
